@@ -31,6 +31,8 @@ let
         "networkmanager"
         "wheel"
       ];
+      # Allow autologin without password (change with `passwd` after first boot)
+      hashedPassword = "";
     };
   };
 
