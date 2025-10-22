@@ -398,6 +398,21 @@
         "type": "github"
       }
     },
+    "preservation": {
+      "locked": {
+        "lastModified": 1757436102,
+        "narHash": "sha256-mMI9IanU+Xw+pVogD2oT0I2kTmvz2Un/Apc5+CwUpEY=",
+        "owner": "nix-community",
+        "repo": "preservation",
+        "rev": "93416f4614ad2dfed5b0dcf12f27e57d27a5ab11",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "preservation",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "SPC": "SPC",
@@ -419,6 +434,7 @@
         "nixpkgs-lib": [
           "nixpkgs"
         ],
+        "preservation": "preservation",
         "sops-nix": "sops-nix",
         "systems": "systems_4",
         "treefmt-nix": "treefmt-nix_2",

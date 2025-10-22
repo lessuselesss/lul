@@ -70,6 +70,9 @@
     nixpkgs-lib = {
       follows = "nixpkgs";
     };
+    preservation = {
+      url = "github:nix-community/preservation";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
     };
