@@ -18,11 +18,17 @@ let
       home.packages = [ pkgs.sops ];
 
       sops = {
-        age.keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
+        # Use GPG with hardware keys (Ledger Nano / Flipper Zero)
+        gnupg.home = "${config.home.homeDirectory}/.gnupg";
+        gnupg.sshKeyPaths = [ ];  # Don't use SSH keys
+
+        # Disable age (using GPG instead)
+        age.keyFile = null;
         age.sshKeyPaths = [ ];
         age.generateKey = false;
+
         defaultSopsFile = ./secrets.yaml;
-        validateSopsFiles = true;
+        validateSopsFiles = false;  # Disable until we set up new keys
 
         secrets = {
           "hello" = { };

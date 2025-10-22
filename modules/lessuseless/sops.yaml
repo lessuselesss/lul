@@ -1,7 +1,11 @@
 keys:
-  - &vic age1wmg6gkfar8nl9tr2y409vac6zqwnfjvjh6rxh2fl6x3tx4rzwdxqwj2r9e
+  # Replace with your GPG key fingerprint after hardware key setup
+  # Run: gpg --list-secret-keys --keyid-format LONG
+  # Get the 40-character fingerprint
+  - &lessuseless YOUR_GPG_FINGERPRINT_HERE_40_CHARS
+
 creation_rules:
   - path_regex: ^.*$
     key_groups:
-      - age:
-          - *vic
+      - pgp:  # Changed from 'age' to 'pgp' for GPG/hardware keys
+          - *lessuseless
