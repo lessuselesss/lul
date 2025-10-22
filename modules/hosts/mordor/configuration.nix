@@ -6,6 +6,7 @@ let
     mordor-unfree
     nvidia
     lessuseless
+    impermanence  # User-level persistence (lessuseless module uses this)
     xfce-desktop
   ];
 
