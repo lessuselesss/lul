@@ -5,7 +5,7 @@ let
     mordor-nvidia
     mordor-unfree
     nvidia
-    vic
+    lessuseless
     xfce-desktop
   ];
 

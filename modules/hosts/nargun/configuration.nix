@@ -1,7 +1,7 @@
 { inputs, ... }:
 let
   flake.modules.nixos.nargun.imports = with inputs.self.modules.nixos; [
-    vic
+    lessuseless
     niri-desktop
     xfce-desktop
     macos-keys

@@ -11,7 +11,7 @@
     {
       imports = with inputs.self.modules.nixos; [
         "${toString modulesPath}/installer/cd-dvd/installation-cd-base.nix"
-        vic
+        lessuseless
         macos-keys
         kvm-intel
         wl-broadcom
@@ -19,12 +19,12 @@
         xfce-desktop
       ];
 
-      lib.isoFileSystems."/home/vic" = {
-        device = "/dev/disk/by-label/vic";
+      lib.isoFileSystems."/home/lessuseless" = {
+        device = "/dev/disk/by-label/lessuseless";
         fsType = "ext4";
       };
 
-      users.users.vic.uid = 1000;
+      users.users.lessuseless.uid = 1000;
       users.users.nixos.uid = 1001;
 
       isoImage.edition = lib.mkDefault config.networking.hostName;

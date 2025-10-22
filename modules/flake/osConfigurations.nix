@@ -14,6 +14,7 @@ let
     nargun = linux "nargun";
     smaug = linux "smaug";
     nienna = linux "nienna";
+    tachi = linux "tachi";
     tom = linux "tom";
     bombadil = linux "bombadil";
     bill = linux-arm "bill";

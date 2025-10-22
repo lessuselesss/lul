@@ -4,7 +4,7 @@
 { inputs, ... }:
 {
   flake.modules.nixos.smaug.imports = with inputs.self.modules.nixos; [
-    vic
+    lessuseless
     xfce-desktop
     macos-keys
     kvm-intel

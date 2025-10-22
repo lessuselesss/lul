@@ -21,6 +21,14 @@
     devshell = {
       url = "github:numtide/devshell";
     };
+    disko = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:nix-community/disko";
+    };
     doom-emacs = {
       flake = false;
       url = "github:doomemacs/doomemacs";
@@ -37,6 +45,9 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager";
+    };
+    impermanence = {
+      url = "github:nix-community/impermanence";
     };
     import-tree = {
       url = "github:vic/import-tree";
