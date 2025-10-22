@@ -9,16 +9,21 @@ let
     {
       programs.ssh = {
         enable = true;
-        addKeysToAgent = "yes";
-        controlMaster = "auto";
-        controlPath = "~/.ssh/socket-%r@%h:%p";
-        controlPersist = "10m";
+        enableDefaultConfig = false;  # Explicitly manage defaults
         includes = [ "~/.config/sops-nix/secrets/ssh/sops_ssh_config" ];
 
         matchBlocks = {
+          # Default configuration for all hosts
+          "*" = {
+            addKeysToAgent = "yes";
+            controlMaster = "auto";
+            controlPath = "~/.ssh/socket-%r@%h:%p";
+            controlPersist = "10m";
+          };
+
           "github.com" = {
             identityFile = "~/.ssh/id_ed25519";
-            extraOptions.ControlPersist = "no";
+            controlPersist = "no";  # Override default
           };
 
           "edge" = {

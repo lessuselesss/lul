@@ -5,7 +5,7 @@
     programs.gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
+      pinentryPackage = pkgs.pinentry-gnome3;  # System-level uses pinentryPackage (not deprecated)
     };
 
     # Enable smartcard daemon for hardware keys
@@ -41,7 +41,7 @@
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
+      pinentry.package = pkgs.pinentry-gnome3;  # Updated option name
 
       # Increase cache time for hardware keys (enter PIN less often)
       defaultCacheTtl = 3600;  # 1 hour

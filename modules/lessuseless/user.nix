@@ -27,6 +27,7 @@ let
   linux = {
     users.users.lessuseless = {
       isNormalUser = true;
+      uid = 1000;  # Fixed UID for impermanence
       extraGroups = [
         "networkmanager"
         "wheel"
