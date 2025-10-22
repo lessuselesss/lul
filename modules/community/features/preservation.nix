@@ -10,5 +10,8 @@
     ];
 
     preservation.enable = true;
+
+    # Preservation requires systemd-based initrd (not scripted)
+    boot.initrd.systemd.enable = true;
   };
 }
