@@ -3,7 +3,7 @@
 {
   flake.modules.nixos.tachi.imports = with inputs.self.modules.nixos; [
     lessuseless
-    impermanence
+    preservation
     disko
     xfce-desktop
     macos-keys
