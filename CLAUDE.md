@@ -147,6 +147,15 @@ The `flake.nix` file is auto-generated. To regenerate:
 ```bash
 nix run .#write-flake
 ```
+
+**IMPORTANT**: Files must be **committed** (not just staged) before running `write-flake`. The flake-file auto-generation uses git to discover module files via import-tree. If you create new modules with `flake-file.inputs` declarations but don't commit them, those inputs won't appear in the generated flake.nix.
+
+**Workflow**:
+1. Create or modify modules with `flake-file.inputs` declarations
+2. `git add` and `git commit` your changes
+3. Run `nix run .#write-flake` to regenerate flake.nix
+4. Commit the updated flake.nix and flake.lock
+
 **Note**: The file header says "DO-NOT-EDIT" - modify module inputs instead.
 
 ## Creating a New Host
