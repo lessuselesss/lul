@@ -28,6 +28,8 @@
       };
 
       # DankMaterialShell - replaces waybar and mako
+      # Note: niri module not imported, so no automatic keybinds
+      # Add keybinds manually to your niri config.kdl if desired
       programs.dankMaterialShell = {
         enable = true;
         enableSystemd = true;
@@ -42,13 +44,6 @@
         enableAudioWavelength = true;
         enableCalendarEvents = false;  # Requires khal setup
         enableSystemSound = true;
-
-        # Niri integration disabled - we're using custom config.kdl
-        # You can manually add DMS keybinds to your niri config.kdl if desired
-        niri = {
-          enableKeybinds = false;
-          enableSpawn = true;  # Still auto-start DMS
-        };
       };
 
       # Swayidle for automatic screen locking
