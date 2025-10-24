@@ -1,10 +1,16 @@
 { inputs, ... }:
 {
   flake-file.inputs.nix-wallpaper.url = "github:lunik1/nix-wallpaper";
+  flake-file.inputs.dms.url = "github:AvengeMedia/DankMaterialShell";
 
   flake.modules.homeManager.lessuseless =
     { pkgs, config, lib, ... }:
     {
+      imports = [
+        inputs.dms.homeModules.dankMaterialShell.default
+        inputs.dms.homeModules.dankMaterialShell.niri
+      ];
+
       # Wallpaper package
       home.packages = [
         (inputs.nix-wallpaper.packages.${pkgs.system}.default.override {
@@ -20,132 +26,37 @@
         components = [ "pkcs11" "secrets" "ssh" ];
       };
 
-      # Waybar configuration for niri
-      programs.waybar = {
+      # DankMaterialShell - replaces waybar and mako
+      programs.dankMaterialShell = {
         enable = true;
-        settings = [{
-          layer = "top";
-          position = "top";
-          height = 30;
+        enableSystemd = true;
 
-          modules-left = [ "niri/workspaces" "niri/window" ];
-          modules-center = [ "clock" ];
-          modules-right = [ "pulseaudio" "network" "battery" "tray" ];
+        # Feature flags
+        enableSystemMonitoring = true;
+        enableClipboard = true;
+        enableVPN = true;
+        enableBrightnessControl = true;
+        enableColorPicker = true;
+        enableDynamicTheming = true;
+        enableAudioWavelength = true;
+        enableCalendarEvents = false;  # Requires khal setup
+        enableSystemSound = true;
 
-          "niri/workspaces" = {
-            format = "{icon}";
-            format-icons = {
-              active = "";
-              default = "";
-            };
-          };
-
-          "niri/window" = {
-            max-length = 50;
-          };
-
-          clock = {
-            format = "{:%H:%M %a %d %b}";
-            tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-          };
-
-          pulseaudio = {
-            format = "{icon} {volume}%";
-            format-muted = " muted";
-            format-icons = {
-              default = [ "" "" "" ];
-            };
-            on-click = "pavucontrol";
-          };
-
-          network = {
-            format-wifi = " {essid}";
-            format-ethernet = " {ifname}";
-            format-disconnected = "⚠ Disconnected";
-            tooltip-format = "{ifname}: {ipaddr}";
-          };
-
-          battery = {
-            format = "{icon} {capacity}%";
-            format-icons = [ "" "" "" "" "" ];
-            format-charging = " {capacity}%";
-          };
-
-          tray = {
-            spacing = 10;
-          };
-        }];
-
-        style = ''
-          * {
-            font-family: "Roboto", sans-serif;
-            font-size = 13px;
-          }
-
-          window#waybar {
-            background-color: rgba(30, 30, 46, 0.9);
-            color: #cdd6f4;
-            border-bottom: 2px solid rgba(127, 200, 255, 0.5);
-          }
-
-          #workspaces button {
-            padding: 0 8px;
-            color: #cdd6f4;
-            background-color: transparent;
-          }
-
-          #workspaces button.active {
-            background-color: rgba(127, 200, 255, 0.3);
-            border-radius: 4px;
-          }
-
-          #window {
-            margin-left: 10px;
-            font-weight: bold;
-          }
-
-          #clock,
-          #pulseaudio,
-          #network,
-          #battery,
-          #tray {
-            padding: 0 10px;
-            margin: 0 5px;
-          }
-
-          #battery.charging {
-            color: #a6e3a1;
-          }
-
-          #battery.warning:not(.charging) {
-            color: #f9e2af;
-          }
-
-          #battery.critical:not(.charging) {
-            color: #f38ba8;
-          }
-        '';
-      };
-
-      # Mako notification daemon
-      services.mako = {
-        enable = true;
-        settings = {
-          background-color = "#1e1e2e";
-          text-color = "#cdd6f4";
-          border-color = "#7fc8ff";
-          border-radius = 8;
-          default-timeout = 5000;
+        # Niri integration
+        niri = {
+          enableKeybinds = true;
+          enableSpawn = true;
         };
       };
 
       # Swayidle for automatic screen locking
+      # Note: DMS has its own lock screen (Super+Alt+L)
       services.swayidle = {
         enable = true;
         timeouts = [
           {
             timeout = 300;
-            command = "${pkgs.swaylock}/bin/swaylock -f";
+            command = "dms ipc lock lock";
           }
           {
             timeout = 600;
