@@ -268,11 +268,10 @@ layout {
 // See the binds section below for more spawn examples.
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "ghostty"
-spawn-at-startup "xfce4-panel"
-spawn-at-startup "xfce4-power-manager"
+spawn-at-startup "waybar"
 spawn-at-startup "blueman-applet"
 spawn-at-startup "nm-applet"
-spawn-sh-at-startup "swaybg -i ~/.background.jpg"
+spawn-sh-at-startup "swaybg -i $HOME/.nix-profile/share/wallpapers/nixos-wallpaper.png"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 hotkey-overlay {
@@ -391,11 +390,11 @@ binds {
     Mod+T hotkey-overlay-title="Terminal: ghostty" {
         spawn "ghostty"
     }
-    Mod+A hotkey-overlay-title="Launch: xfce4-appfinder" {
-        spawn "xfce4-appfinder"
+    Mod+A hotkey-overlay-title="Launch: fuzzel" {
+        spawn "fuzzel"
     }
-    Mod+S hotkey-overlay-title="Settings: xfce4-settings" {
-        spawn "xfce4-settings-manager"
+    Mod+S hotkey-overlay-title="Screenshot" {
+        screenshot
     }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
