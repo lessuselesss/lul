@@ -7,6 +7,11 @@
   nr = "nix run";
   nf = "fd --glob '*.nix' -X nixfmt {}";
 
+  # NixOS/Darwin rebuild
+  nos = "nix run path:$HOME/.flake#os-rebuild -- switch";
+  nob = "nix run path:$HOME/.flake#os-rebuild -- boot";
+  not = "nix run path:$HOME/.flake#os-rebuild -- test";
+
   vir = {
     expansion = "nvim -c \"'0%\"";
     setCursor = true;

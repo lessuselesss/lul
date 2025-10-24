@@ -32,10 +32,14 @@ let
         "networkmanager"
         "wheel"
       ];
-      # Allow autologin without password (change with `passwd` after first boot)
+      # Temporary password: temp123 (change after rebuild with proper password)
       # Use initialHashedPassword with users.mutableUsers = false from impermanence
-      initialHashedPassword = "";
+      initialHashedPassword = "$6$3pkmqC.4p8Dxi6VN$JM6bVQCBO2SjJE5/0JKJ0jwcS.GhwnVyvCRETtrNiee6Wj4ExSoyG4AUZKAWoNgRcY1ryR9lzTjKheAP7MKJ6/";
     };
+
+    # Allow wheel group to use sudo without password
+    # TODO: Set a proper password hash and remove this
+    security.sudo.wheelNeedsPassword = false;
   };
 
   darwin.system.primaryUser = "lessuseless";

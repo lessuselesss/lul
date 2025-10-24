@@ -7,7 +7,6 @@
     impermanence  # User-level persistence (lessuseless module uses this)
     disko
     xfce-desktop
-    macos-keys
     kvm-intel
   ];
 }
