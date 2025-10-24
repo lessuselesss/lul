@@ -11,8 +11,8 @@
           preset = "catppuccin-mocha-rainbow";
         })
       ];
-      # Niri configuration file (KDL format)
-      home.file.".config/niri/config.kdl".source = ./dots/config/niri/config.kdl;
+
+      # Note: Niri config.kdl is linked by dots.nix (entire .config/niri directory)
 
       # GNOME Keyring for credential storage
       services.gnome-keyring = {
