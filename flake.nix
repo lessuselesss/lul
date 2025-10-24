@@ -61,6 +61,9 @@
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
     };
+    nix-wallpaper = {
+      url = "github:lunik1/nix-wallpaper";
+    };
     nixos-wsl = {
       url = "github:nix-community/nixos-wsl";
     };
