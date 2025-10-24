@@ -83,11 +83,20 @@ Hosts in `modules/hosts/[hostname]/` import user and feature modules:
 ### Building and Deploying
 
 ```bash
-# Rebuild current host (auto-detects hostname)
-nix run path:~/.flake#os-rebuild -- switch
+# Rebuild current host (auto-detects hostname, defaults to switch)
+# When inside the repo:
+nix run .#os-rebuild
+# When outside the repo (requires ~/.flake symlink):
+nix run path:$HOME/.flake#os-rebuild
+
+# Rebuild current host with specific action (boot, test, etc.)
+nix run .#os-rebuild boot
 
 # Rebuild specific host
-nix run path:~/.flake#os-rebuild -- HOSTNAME switch
+nix run .#os-rebuild tachi switch
+
+# Get help and see available hosts
+nix run .#os-rebuild -- --help
 
 # Install NixOS on new machine
 nixos-install --root /mnt --flake ~/.flake#HOSTNAME

@@ -1,5 +1,5 @@
 {
-  ls = "exa";
+  ls = "eza";
   top = "btm";
   cat = "bat";
   grep = "rg";

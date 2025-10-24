@@ -34,6 +34,15 @@
 -[x] Create modules/lessuseless/services/ directory structure
 
 ## Future Integrations
+-[ ] External Project (WIP/Todo)
+    -[ ] Niri-keymaps (app invokable by hotkey that discovers + shows the focused programs keymaps/shortcuts)
+    -[ ] Niri-hints [integrate hints into niri + wayland)
+    -[ ] Niri-super-productivity (task-driven contextual workspaces filtering (off-task, focus breaking content is moved to the right-most in niri's wm)
+
+
+-[ ] Layers:
+    -[ ] Niri (look at https://github.com/Vortriz/awesome-niri for integrations)
+    -[ ] Hints (Multiple DE Environments + Niri)
 
 -[ ] Modules:
     -[ ] Typix

@@ -5,6 +5,8 @@
     {
       # Bootloader.
       boot.loader.systemd-boot.enable = true;
+      boot.loader.systemd-boot.configurationLimit = 10;  # Keep last 10 generations
+      boot.loader.timeout = 5;  # Show menu for 5 seconds (press any key to extend)
       boot.loader.efi.canTouchEfiVariables = true;
       powerManagement.enable = true;
 

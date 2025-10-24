@@ -14,5 +14,8 @@
 
     # Disable mutable users for impermanence setup
     users.mutableUsers = false;
+
+    # Enable FUSE user_allow_other for home-manager impermanence mounts
+    programs.fuse.userAllowOther = true;
   };
 }

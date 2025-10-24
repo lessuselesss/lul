@@ -18,14 +18,14 @@ let
       home.packages = [ pkgs.sops ];
 
       sops = {
-        # Use GPG with hardware keys (Ledger Nano / Flipper Zero)
-        gnupg.home = "${config.home.homeDirectory}/.gnupg";
-        gnupg.sshKeyPaths = [ ];  # Don't use SSH keys
-
-        # Disable age (using GPG instead)
-        age.keyFile = null;
+        # Use age keys (backed up to Ventoy)
+        age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+        age.generateKey = true;  # Auto-generate if missing
         age.sshKeyPaths = [ ];
-        age.generateKey = false;
+
+        # Disable GPG
+        gnupg.home = null;
+        gnupg.sshKeyPaths = [ ];
 
         defaultSopsFile = ./secrets.yaml;
         validateSopsFiles = false;  # Disable until we set up new keys
@@ -36,22 +36,23 @@ let
           "gemini_eco_key" = { };
           "copilot_api_key" = { };
           "anthropic_api_key" = { };
-          "edge.token" = {
-            format = "binary";
-            sopsFile = ./secrets/edge.token;
-          };
-          "ssh/id_ed25519" = {
-            format = "binary";
-            sopsFile = ./secrets/mordor;
-          };
-          "ssh/sops_ssh_config" = {
-            format = "binary";
-            sopsFile = ./secrets/ssh-conf;
-          };
-          "ssh/localhost_run" = {
-            format = "binary";
-            sopsFile = ./secrets/localhost_run;
-          };
+          # Binary secrets - add these later as needed
+          # "edge.token" = {
+          #   format = "binary";
+          #   sopsFile = ./secrets/edge.token;
+          # };
+          # "ssh/id_ed25519" = {
+          #   format = "binary";
+          #   sopsFile = ./secrets/mordor;
+          # };
+          # "ssh/sops_ssh_config" = {
+          #   format = "binary";
+          #   sopsFile = ./secrets/ssh-conf;
+          # };
+          # "ssh/localhost_run" = {
+          #   format = "binary";
+          #   sopsFile = ./secrets/localhost_run;
+          # };
         };
 
         templates = {

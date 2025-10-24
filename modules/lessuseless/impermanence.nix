@@ -18,14 +18,22 @@
         "dotfiles"
 
         # SSH keys (restricted permissions)
-        {
-          directory = ".ssh";
-          mode = "0700";
-        }
+        ".ssh"
+
+        # === BROWSERS ===
+        # Firefox - full persistence
+        ".mozilla/firefox"          # Firefox sessions, cookies, passwords
+
+        # Qutebrowser - granular persistence (sessions & cookies only)
+        ".local/share/qutebrowser/sessions"        # Tab sessions
+        ".local/share/qutebrowser/webengine/Cookies"  # Cookies only
+        # Note: Config, history, bookmarks are ephemeral (fresh each boot)
+
+        # Chromium - full persistence for convenience
+        ".config/chromium"          # Full chromium data (profiles, extensions, etc)
 
         # === SESSIONS & AUTH ===
         ".local/share/keyrings"     # GNOME keyring (passwords for apps)
-        ".mozilla/firefox"          # Firefox sessions, cookies, passwords
 
         # === DEVELOPMENT ===
         ".local/share/direnv"       # direnv allowed directories

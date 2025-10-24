@@ -1,9 +1,9 @@
 {
   y = "EDITOR=d yazi";
-  l = "exa -l";
-  ll = "exa -l -@ --git";
-  tree = "exa -T";
-  # "." = "exa -g";
+  l = "eza -l";
+  ll = "eza -l -@ --git";
+  tree = "eza -T";
+  # "." = "eza -g";
   ".." = "cd ..";
   vs = ''vim -c "lua Snacks.picker.smart()"'';
   vf = ''vim -c "lua Snacks.picker.files()"'';

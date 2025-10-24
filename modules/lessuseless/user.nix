@@ -31,15 +31,17 @@ let
       extraGroups = [
         "networkmanager"
         "wheel"
+        "video"      # Access to video devices
+        "audio"      # Access to audio devices
+        "plugdev"    # Access to pluggable devices (USB, etc.)
       ];
-      # Temporary password: temp123 (change after rebuild with proper password)
+      # Password configured via initialHashedPassword
       # Use initialHashedPassword with users.mutableUsers = false from impermanence
-      initialHashedPassword = "$6$3pkmqC.4p8Dxi6VN$JM6bVQCBO2SjJE5/0JKJ0jwcS.GhwnVyvCRETtrNiee6Wj4ExSoyG4AUZKAWoNgRcY1ryR9lzTjKheAP7MKJ6/";
+      initialHashedPassword = "$6$.K.oyv.fU6Gqu1ov$aia2TQleZO1L7VhUS6XoBAf08ZXx7ATE42B6/l0G5YGrwbUT0eOZDTuSHAmAHW3L50mBVcyh3m3Fk7ndq9Jby/";
     };
 
-    # Allow wheel group to use sudo without password
-    # TODO: Set a proper password hash and remove this
-    security.sudo.wheelNeedsPassword = false;
+    # Require password for sudo
+    security.sudo.wheelNeedsPassword = true;
   };
 
   darwin.system.primaryUser = "lessuseless";

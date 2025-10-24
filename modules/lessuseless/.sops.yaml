@@ -1,0 +1,6 @@
+keys:
+  - &lessuseless age1nxlu537eqmghlpg7rclmrqldu6jjxhsezmwm4a2h9z5pcsa0j43q04t5va
+
+creation_rules:
+  - path_regex: .*\.(yaml|json|env|ini)$
+    age: *lessuseless

@@ -1,10 +1,11 @@
-{ config, pkgs, lib, ... }:
-let
-  cfg = config.services.time-machine;
-in
 {
-  flake.modules.nixos.lessuseless = {
-    options.services.time-machine = {
+  flake.modules.nixos.lessuseless =
+    { config, pkgs, lib, ... }:
+    let
+      cfg = config.services.time-machine;
+    in
+    {
+      options.services.time-machine = {
       enable = lib.mkEnableOption "httm-based time machine backups";
 
       # Scoped whitelist for btrfs native snapshots
@@ -149,7 +150,7 @@ in
               "time-machine-rsync-${toString idx}" = {
                 description = "Rsync snapshots to ${backupPath}";
                 after = [ "btrbk-time-machine.service" ];
-                wants = [ "${lib.strings.removePrefix "/" target.mountPoint}-automount.service" ];
+                wants = [ "${builtins.replaceStrings ["/"] ["-"] (lib.strings.removePrefix "/" target.mountPoint)}.mount" ];
 
                 serviceConfig = {
                   Type = "oneshot";
@@ -198,10 +199,12 @@ in
   };
 
   # Home-manager configuration for httm
-  flake.modules.homeManager.lessuseless = {
-    home.packages = lib.mkIf config.services.time-machine.enable [ pkgs.httm ];
+  flake.modules.homeManager.lessuseless =
+    { config, pkgs, lib, osConfig, ... }:
+    {
+      home.packages = lib.mkIf (osConfig.services.time-machine.enable or false) [ pkgs.httm ];
 
-    programs.fish.shellAbbrs = lib.mkIf config.services.time-machine.enable {
+      programs.fish.shellAbbrs = lib.mkIf (osConfig.services.time-machine.enable or false) {
       ht = "httm";
       hts = "httm -s";
       htm = "httm -n"; # Show number of snapshots

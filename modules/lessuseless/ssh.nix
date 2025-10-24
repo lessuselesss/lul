@@ -10,7 +10,8 @@ let
       programs.ssh = {
         enable = true;
         enableDefaultConfig = false;  # Explicitly manage defaults
-        includes = [ "~/.config/sops-nix/secrets/ssh/sops_ssh_config" ];
+        # DISABLED: sops ssh config not set up yet
+        # includes = [ "~/.config/sops-nix/secrets/ssh/sops_ssh_config" ];
 
         matchBlocks = {
           # Default configuration for all hosts
@@ -22,7 +23,7 @@ let
           };
 
           "github.com" = {
-            identityFile = "~/.ssh/id_ed25519";
+            identityFile = "~/.ssh/gh_ed25519";
             controlPersist = "no";  # Override default
           };
 
@@ -63,10 +64,12 @@ let
 
       services.ssh-agent.enable = pkgs.stdenv.isLinux;
 
-      home.activation.link-ssh-id = lib.hm.dag.entryAfter [ "link-flake" "sops-nix" "reloadSystemd" ] ''
-        run ln -sf "${config.sops.secrets."ssh/id_ed25519".path}" $HOME/.ssh/id_ed25519
-        run ln -sf "${config.sops.secrets."ssh/localhost_run".path}" $HOME/.ssh/id_localhost_run
-      '';
+      # DISABLED: sops ssh secrets not set up yet
+      # Use your existing SSH keys instead
+      # home.activation.link-ssh-id = lib.hm.dag.entryAfter [ "link-flake" "sops-nix" "reloadSystemd" ] ''
+      #   run ln -sf "${config.sops.secrets."ssh/id_ed25519".path}" $HOME/.ssh/id_ed25519
+      #   run ln -sf "${config.sops.secrets."ssh/localhost_run".path}" $HOME/.ssh/id_localhost_run
+      # '';
     };
 in
 {

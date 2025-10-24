@@ -6,7 +6,7 @@
     preservation  # System-level persistence (pure Nix)
     impermanence  # User-level persistence (lessuseless module uses this)
     disko
-    xfce-desktop
+    niri-desktop  # Scrollable-tiling Wayland compositor
     kvm-intel
   ];
 }
