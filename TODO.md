@@ -34,6 +34,17 @@
 -[x] Create modules/lessuseless/services/ directory structure
 
 ## Future Integrations
+
+-[ ] **Co-workspace for autonomous agents**
+    - Create `/co-workspace/` - shared filesystem for agent collaboration
+    - Structure:
+      - `/co-workspace/shared/` - Shared context/state between agents
+      - `/co-workspace/claude/` - Claude Code workspace
+      - `/co-workspace/projects/` - Active projects (could host nixos-config)
+      - `/co-workspace/outputs/` - Agent-generated artifacts
+    - Benefits: Clean separation, clear semantic purpose, multi-agent coordination
+    - Alternative: Keep `~/.flake` but clone from GitHub to local disk for speed
+
 -[ ] External Project (WIP/Todo)
     -[ ] Niri-keymaps (app invokable by hotkey that discovers + shows the focused programs keymaps/shortcuts)
     -[ ] Niri-hints [integrate hints into niri + wayland)
