@@ -8,7 +8,8 @@
     {
       imports = [
         inputs.dms.homeModules.dankMaterialShell.default
-        inputs.dms.homeModules.dankMaterialShell.niri
+        # DMS niri module disabled - conflicts with our custom config.kdl
+        # inputs.dms.homeModules.dankMaterialShell.niri
       ];
 
       # Wallpaper package
@@ -42,10 +43,11 @@
         enableCalendarEvents = false;  # Requires khal setup
         enableSystemSound = true;
 
-        # Niri integration
+        # Niri integration disabled - we're using custom config.kdl
+        # You can manually add DMS keybinds to your niri config.kdl if desired
         niri = {
-          enableKeybinds = true;
-          enableSpawn = true;
+          enableKeybinds = false;
+          enableSpawn = true;  # Still auto-start DMS
         };
       };
 
