@@ -15,8 +15,8 @@
     SPC = {
       url = "github:vic/SPC";
     };
-    allfollow = {
-      url = "github:spikespaz/allfollow";
+    den = {
+      url = "github:vic/den";
     };
     devshell = {
       url = "github:numtide/devshell";
@@ -40,6 +40,9 @@
       flake = false;
       url = "github:mudler/edgevpn";
     };
+    flake-aspects = {
+      url = "github:vic/flake-aspects";
+    };
     flake-file = {
       url = "github:vic/flake-file";
     };
@@ -57,6 +60,9 @@
     };
     jjui = {
       url = "github:idursun/jjui";
+    };
+    nix-auto-follow = {
+      url = "github:fzakaria/nix-auto-follow";
     };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
