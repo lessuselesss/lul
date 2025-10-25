@@ -29,6 +29,9 @@
       };
       url = "github:nix-community/disko";
     };
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell";
+    };
     doom-emacs = {
       flake = false;
       url = "github:doomemacs/doomemacs";
