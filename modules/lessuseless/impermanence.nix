@@ -38,6 +38,7 @@
         # === DEVELOPMENT ===
         ".local/share/direnv"       # direnv allowed directories
         ".config/gh"                # GitHub CLI authentication
+        ".config/lul"               # NixOS/Darwin/WSL flake configuration
         ".local/share/fish"         # Fish shell history & data
 
         # === PERFORMANCE ===
