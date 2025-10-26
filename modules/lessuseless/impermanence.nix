@@ -53,6 +53,7 @@
 
       files = [
         ".bash_history"
+        ".flake"  # Symlink to ~/.config/lul
       ];
 
       allowOther = true;  # Required for some applications
