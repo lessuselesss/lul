@@ -3,7 +3,7 @@
   # Tachi host aspect - Intel 11th Gen i7-1165G7
   flake.aspects.tachi = {
     # Include feature aspects
-    includes = { flake, ... }: with flake.aspects; [
+    includes = { aspects, ... }: with aspects; [
       preservation
       impermanence
       disko
