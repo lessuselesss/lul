@@ -4,17 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a NixOS/Darwin/WSL configuration repository using the **Dendritic Pattern** - a modular approach that automatically generates `flake.nix` from module-defined inputs and auto-discovers all `.nix` files in `./modules/`.
+This is a NixOS/Darwin/WSL configuration repository using the **Dendritic Pattern** with the **Den Pattern** - an aspect-oriented approach for organizing host and user configurations.
 
 **Key architectural components:**
 - [`vic/flake-file`](https://github.com/vic/flake-file): Generates flake.nix from `flake-file.inputs` declarations across modules
 - [`vic/import-tree`](https://github.com/vic/import-tree): Auto-discovers and loads all `./modules/**/*.nix` files
-- Entry point: `modules/flake/dendritic.nix`
+- [`vic/den`](https://github.com/vic/den): Aspect-oriented host/user configuration system
+- Entry point: `modules/flake/dendritic.nix` (automatically enables den)
 
 ## Repository Structure
 
 ```
 modules/
+├── aspects/          # Den pattern: aspect-oriented configurations
+│   ├── default.nix   # Global defaults for all hosts/users/home
+│   ├── features/     # Feature aspects (preservation, impermanence, disko, niri-desktop, kvm-intel)
+│   ├── lessuseless.nix  # User aspect for lessuseless
+│   └── tachi.nix     # Host aspect for tachi
 ├── community/        # Shareable, reusable modules for anyone
 │   ├── features/     # Desktop environments, hardware support, platform configs
 │   ├── flake/        # Formatter, systems configuration
@@ -27,8 +33,10 @@ modules/
 │   ├── packages/     # Personal packages (sops utilities, edge)
 │   └── *.nix         # User modules (git, jujutsu, ssh, etc)
 ├── hosts/            # Per-host configurations
-│   └── [hostname]/   # Each host has configuration.nix or darwin-configuration.nix
-└── flake/            # Flake scaffolding (dendritic.nix, osConfigurations.nix)
+│   └── [hostname]/   # Host-specific configs (preservation.nix, etc)
+└── flake/            # Flake scaffolding
+    ├── dendritic.nix # Entry point (enables den automatically)
+    └── hosts.nix     # Host inventory (den.hosts registration)
 ```
 
 ## Module Architecture
@@ -55,7 +63,73 @@ modules/
 
 3. **Auto-Discovery**: `import-tree` loads all `.nix` files from `./modules/`, no manual imports needed
 
-4. **Host Registration**: Hosts are registered in `modules/flake/osConfigurations.nix` using helper functions from `modules/community/lib/+mk-os.nix`
+4. **Host Registration**: Hosts are registered using the den pattern (see below)
+
+### Den Pattern: Aspect-Oriented Configuration
+
+The repository uses the **den pattern** for organizing hosts, users, and configurations through aspects. Aspects are composable configuration modules.
+
+**Aspect Structure:**
+```nix
+{ inputs, ... }:
+{
+  flake.aspects = { aspects, ... }: {
+    # Global defaults applied to all hosts/users
+    default.host.nixos = { system.stateVersion = "25.11"; };
+    default.host.darwin = { system.stateVersion = 6; };
+    default.home.homeManager = { lib, ... }: {
+      home.stateVersion = lib.mkDefault "25.05";
+    };
+
+    # Host aspect (tachi example)
+    tachi.includes = { flake, ... }: with flake.aspects; [
+      preservation  # Feature aspects
+      impermanence
+      niri-desktop
+    ];
+    tachi.nixos = { config, ... }: {
+      networking.hostName = "tachi";
+      imports = [ ../hosts/tachi/preservation.nix ];
+    };
+
+    # User aspect (lessuseless example)
+    lessuseless.nixos = { pkgs, ... }: {
+      users.users.lessuseless = {
+        isNormalUser = true;
+        shell = pkgs.fish;
+      };
+    };
+    lessuseless.homeManager = {
+      imports = [ inputs.self.modules.homeManager.lessuseless ];
+    };
+
+    # Feature aspect (impermanence example)
+    impermanence.nixos = {
+      imports = [ inputs.impermanence.nixosModules.impermanence ];
+      fileSystems."/persist".neededForBoot = true;
+    };
+  };
+}
+```
+
+**Host Registration** in `modules/flake/hosts.nix`:
+```nix
+{ inputs, ... }:
+{
+  den.hosts.x86_64-linux.tachi = {
+    description = "Intel 11th Gen i7-1165G7 laptop";
+    users.lessuseless = {
+      aspect = "lessuseless";  # References the lessuseless user aspect
+    };
+  };
+}
+```
+
+This automatically generates `nixosConfigurations.tachi` by combining:
+- `default` aspect (global defaults)
+- `tachi` aspect (host-specific config)
+- `lessuseless` aspect (user config)
+- All included feature aspects
 
 ### User Configuration Pattern
 
@@ -66,7 +140,34 @@ User modules in `modules/lessuseless/` follow this structure:
 
 ### Host Configuration Pattern
 
-Hosts in `modules/hosts/[hostname]/` import user and feature modules:
+**Current (Den Pattern):**
+
+Host aspects in `modules/aspects/[hostname].nix` define host-specific configuration and include feature aspects:
+```nix
+{ inputs, ... }:
+{
+  flake.aspects.tachi = {
+    # Include feature aspects
+    includes = { flake, ... }: with flake.aspects; [
+      preservation
+      impermanence
+      disko
+      niri-desktop
+      kvm-intel
+    ];
+
+    # Host-specific configuration
+    nixos = { pkgs, lib, config, ... }: {
+      networking.hostName = "tachi";
+      imports = [ ../hosts/tachi/preservation.nix ];
+    };
+  };
+}
+```
+
+**Legacy (Traditional Pattern):**
+
+Hosts in `modules/hosts/[hostname]/` can also import user and feature modules directly (deprecated):
 ```nix
 { inputs, ... }:
 {
@@ -169,36 +270,76 @@ nix run .#write-flake
 
 ## Creating a New Host
 
-1. Create directory: `modules/hosts/[hostname]/`
-2. Add `configuration.nix` (NixOS) or `darwin-configuration.nix` (macOS):
+**Using Den Pattern (Recommended):**
+
+1. Create host aspect: `modules/aspects/[hostname].nix`
    ```nix
    { inputs, ... }:
    {
-     flake.modules.nixos.hostname.imports = with inputs.self.modules.nixos; [
-       lessuseless
-       # Add feature modules as needed
-     ];
+     flake.aspects.[hostname] = {
+       # Include feature aspects
+       includes = { flake, ... }: with flake.aspects; [
+         preservation
+         impermanence
+         # Add other feature aspects as needed
+       ];
+
+       # Host-specific configuration
+       nixos = { pkgs, lib, config, ... }: {
+         networking.hostName = "[hostname]";
+         # Add host-specific config
+       };
+     };
    }
    ```
-3. Register in `modules/flake/osConfigurations.nix`:
+
+2. (Optional) Create host-specific configs: `modules/hosts/[hostname]/`
+   - Add files like `preservation.nix` for host-specific persistence rules
+   - Import from host aspect: `imports = [ ../hosts/[hostname]/preservation.nix ];`
+
+3. Register host in `modules/flake/hosts.nix`:
    ```nix
-   flake.nixosConfigurations = {
-     hostname = linux "hostname";  # or darwin, wsl, etc.
+   den.hosts.x86_64-linux.[hostname] = {
+     description = "Description of the host";
+     users.[username] = {
+       aspect = "[username]";  # User aspect name
+     };
    };
    ```
+
+4. Commit changes and regenerate flake:
+   ```bash
+   git add . && git commit -m "Add [hostname] host"
+   nix run .#write-flake
+   git add flake.nix flake.lock && git commit -m "Regenerate flake"
+   ```
+
+5. Build and deploy:
+   ```bash
+   nix build .#nixosConfigurations.[hostname].config.system.build.toplevel
+   sudo nix run .#os-rebuild -- [hostname] switch
+   ```
+
+**Legacy Pattern (Deprecated):**
+
+1. Create directory: `modules/hosts/[hostname]/`
+2. Add `configuration.nix` (NixOS) or `darwin-configuration.nix` (macOS)
+3. Register in `modules/flake/osConfigurations.nix.old`
 
 ## Customizing for Your Own Setup
 
 The original pattern was designed to be forked:
 
-1. Rename `modules/vic/` → `modules/[yourname]/`
-2. Update all references to `vic` → `[yourname]` in:
+1. Rename `modules/vic/` → `modules/[yourname]/` (if it exists)
+2. Update user aspect: `modules/aspects/lessuseless.nix` → `modules/aspects/[yourname].nix`
+3. Update all references to `lessuseless` → `[yourname]` in:
+   - User aspect file
    - User modules (`user.nix`, `home.nix`, etc.)
-   - Host configurations
+   - Host registrations in `modules/flake/hosts.nix`
    - Git/jujutsu user info
-3. Update `flake.nix` description (or let dendritic regenerate it)
-4. Replace hosts in `modules/hosts/` with your machines
-5. Update `osConfigurations.nix` with your hosts
+4. Update host aspects in `modules/aspects/` with your machines
+5. Update `modules/flake/hosts.nix` with your host inventory
+6. Update `flake.nix` description (or let dendritic regenerate it)
 
 The `modules/community/` directory is intentionally kept generic and shareable.
 
