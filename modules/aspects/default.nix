@@ -1,35 +1,31 @@
 { inputs, ... }:
 {
   # Global defaults for all hosts and users
-  flake.aspects.default = {
+  flake.aspects = { aspects, ... }: {
     # Host defaults
-    host = {
-      nixos = {
-        system.stateVersion = "25.11";
+    default.host.nixos = {
+      system.stateVersion = "25.11";
 
-        # Nix settings
-        nix.settings = {
-          experimental-features = [ "nix-command" "flakes" ];
-          auto-optimise-store = true;
-        };
+      # Nix settings
+      nix.settings = {
+        experimental-features = [ "nix-command" "flakes" ];
+        auto-optimise-store = true;
       };
+    };
 
-      darwin = {
-        system.stateVersion = 6;
-      };
+    default.host.darwin = {
+      system.stateVersion = 6;
     };
 
     # User defaults
-    user = {
-      nixos = {
-        # Users are mutable by default in non-impermanence setups
-        # This will be overridden by impermanence aspect if used
-      };
+    default.user.nixos = {
+      # Users are mutable by default in non-impermanence setups
+      # This will be overridden by impermanence aspect if used
     };
 
     # Home-manager defaults
-    home = {
-      home.stateVersion = "25.05";
+    default.home.homeManager = { lib, ... }: {
+      home.stateVersion = lib.mkDefault "25.05";
     };
   };
 }
