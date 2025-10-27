@@ -7,11 +7,12 @@
 
       programs.git = {
         enable = true;
-        userName = "lessuseless";
-        userEmail = "lessuseless@duck.com";
         signing.format = "ssh";
 
-        extraConfig = {
+        settings = {
+          user.name = "lessuseless";
+          user.email = "lessuseless@duck.com";
+
           init.defaultBranch = "main";
           pull.rebase = true;
           pager.difftool = true;
@@ -23,15 +24,15 @@
           gitlab.user = "lessuseless";
 
           core.editor = "vim";
+
+          alias = {
+            dff = "difftool";
+            fap = "fetch --all -p";
+            rm-merged = "for-each-ref --format '%(refname:short)' refs/heads | grep -v master | xargs git branch -D";
+            recents = "for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'";
+          };
         };
-        aliases = {
-          "dff" = "difftool";
-          "fap" = "fetch --all -p";
-          "rm-merged" =
-            "for-each-ref --format '%(refname:short)' refs/heads | grep -v master | xargs git branch -D";
-          "recents" =
-            "for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'";
-        };
+
         ignores = [
           ".DS_Store"
           "*.swp"
@@ -62,9 +63,12 @@
         # { path = "${DOTS}/git/something"; }
 
         lfs.enable = true;
+      };
 
-        delta.enable = true;
-        delta.options = {
+      programs.delta = {
+        enable = true;
+        enableGitIntegration = true;
+        options = {
           line-numbers = true;
           side-by-side = false;
         };
