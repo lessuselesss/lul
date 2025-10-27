@@ -22,10 +22,5 @@
       # Users are mutable by default in non-impermanence setups
       # This will be overridden by impermanence aspect if used
     };
-
-    # Home-manager defaults
-    default.home.homeManager = { lib, ... }: {
-      home.stateVersion = lib.mkDefault "25.05";
-    };
   };
 }

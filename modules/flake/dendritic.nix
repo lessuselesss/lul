@@ -8,7 +8,6 @@
 
   flake-file.inputs = {
     flake-file.url = "github:vic/flake-file";
-    den.url = "github:vic/den";
   };
 
 }
