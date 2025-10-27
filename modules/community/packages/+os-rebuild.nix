@@ -72,7 +72,7 @@
               fi
             ''}
 
-            "$hostname-os-rebuild" "''${@:-switch}"
+            "$hostname-os-rebuild" -L "''${@:-switch}"
           else
             echo "No configuration found for host: $hostname"
             exit 1
