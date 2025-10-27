@@ -15,6 +15,8 @@ let
       home.packages = [
         ai-pkgs.claude-code
         ai-pkgs.llm
+        ai-pkgs.gemini-cli
+        ai-pkgs.qwen-code
       ];
     };
 
