@@ -10,12 +10,92 @@
     home.persistence."/persist/home/lessuseless" = {
       directories = [
         # Persist everything - add top-level dirs and common dotfiles
-        "Downloads" "Music" "Pictures" "Documents" "Videos" "Desktop" "Public" "Templates"
-        "Projects" "dotfiles"
-        ".config" ".local" ".cache" ".ssh" ".gnupg" ".mozilla" ".thunderbird"
-        ".cargo" ".rustup" ".npm"
+        # Using symlinks instead of bindfs to avoid directories disappearing during rebuilds
+        {
+          directory = "Downloads";
+          method = "symlink";
+        }
+        {
+          directory = "Music";
+          method = "symlink";
+        }
+        {
+          directory = "Pictures";
+          method = "symlink";
+        }
+        {
+          directory = "Documents";
+          method = "symlink";
+        }
+        {
+          directory = "Videos";
+          method = "symlink";
+        }
+        {
+          directory = "Desktop";
+          method = "symlink";
+        }
+        {
+          directory = "Public";
+          method = "symlink";
+        }
+        {
+          directory = "Templates";
+          method = "symlink";
+        }
+        {
+          directory = "Projects";
+          method = "symlink";
+        }
+        {
+          directory = "dotfiles";
+          method = "symlink";
+        }
+        {
+          directory = ".config";
+          method = "symlink";
+        }
+        {
+          directory = ".local";
+          method = "symlink";
+        }
+        {
+          directory = ".cache";
+          method = "symlink";
+        }
+        {
+          directory = ".ssh";
+          method = "symlink";
+        }
+        {
+          directory = ".gnupg";
+          method = "symlink";
+        }
+        {
+          directory = ".mozilla";
+          method = "symlink";
+        }
+        {
+          directory = ".thunderbird";
+          method = "symlink";
+        }
+        {
+          directory = ".cargo";
+          method = "symlink";
+        }
+        {
+          directory = ".rustup";
+          method = "symlink";
+        }
+        {
+          directory = ".npm";
+          method = "symlink";
+        }
       ];
-      files = [ ".bash_history" ".zsh_history" ];
+      files = [
+        ".bash_history"
+        ".zsh_history"
+      ];
       allowOther = true;
     };
 
