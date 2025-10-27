@@ -1,22 +1,21 @@
 { inputs, ... }:
 {
   # Tachi host aspect - Intel 11th Gen i7-1165G7
-  flake.aspects.tachi.nixos =
-    { pkgs, lib, config, ... }:
-    {
+  flake.aspects.tachi = {
+    # Include feature aspects using den pattern
+    includes = { flake, ... }: with flake.aspects; [
+      preservation
+      impermanence
+      disko
+      niri-desktop
+      kvm-intel
+    ];
+
+    nixos = { pkgs, lib, config, ... }: {
       networking.hostName = "tachi";
 
       # Set the platform for this host
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
-      # Import feature modules
-      imports = [
-        inputs.self.modules.nixos.preservation
-        inputs.self.modules.nixos.impermanence
-        inputs.self.modules.nixos.disko
-        inputs.self.modules.nixos.niri-desktop
-        inputs.self.modules.nixos.kvm-intel
-      ];
 
       # System-level preservation configuration for tachi
       preservation.preserveAt."/persist" = {
@@ -44,4 +43,5 @@
         ];
       };
     };
+  };
 }
