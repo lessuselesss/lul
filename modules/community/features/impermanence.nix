@@ -5,9 +5,9 @@
   };
 
   flake.modules.nixos.impermanence = {
-    imports = [
-      inputs.impermanence.nixosModules.impermanence
-    ];
+    # NOTE: We only use home-manager impermanence (home.persistence),
+    # not NixOS-level impermanence (environment.persistence).
+    # The home-manager module is imported in user-specific configs.
 
     # Ensure /persist is mounted early in boot sequence
     fileSystems."/persist".neededForBoot = true;
