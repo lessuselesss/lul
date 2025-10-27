@@ -6,6 +6,9 @@
     {
       networking.hostName = "tachi";
 
+      # Set the platform for this host
+      nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+
       # Import feature modules
       imports = [
         inputs.self.modules.nixos.preservation
