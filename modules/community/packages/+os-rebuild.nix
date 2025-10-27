@@ -38,7 +38,7 @@
               ++ [
                 pkgs.coreutils
               ]
-              ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.systemd ])
+              ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.systemd pkgs.btrbk ])
 
             )
           }"
@@ -64,6 +64,14 @@
           fi
 
           if test "file" = "$(type -t "$hostname-os-rebuild")"; then
+            # Take a pre-rebuild snapshot on Linux systems with btrbk
+            ${lib.optionalString pkgs.stdenv.isLinux ''
+              if command -v btrbk &> /dev/null && systemctl is-active --quiet btrbk-time-machine.service 2>/dev/null || true; then
+                echo "📸 Creating pre-rebuild snapshot..."
+                systemctl start btrbk-time-machine.service || echo "⚠️  Snapshot failed, continuing with rebuild..."
+              fi
+            ''}
+
             "$hostname-os-rebuild" "''${@:-switch}"
           else
             echo "No configuration found for host: $hostname"
