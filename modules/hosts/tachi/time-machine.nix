@@ -12,7 +12,8 @@
       snapshotRetention = "48h 7d 4w";
 
       # Snapshot the persist subvolume (contains user data via impermanence)
-      subvolumes = [ "@persist" ];
+      # Use the mount point path, not the subvolume name
+      subvolumes = [ "persist" ];
 
       # Rsync backups to Ventoy drive (works with exfat)
       rsyncTargets = [
