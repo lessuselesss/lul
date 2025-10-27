@@ -58,6 +58,9 @@
     jjui = {
       url = "github:idursun/jjui";
     };
+    nix-ai-tools = {
+      url = "github:lessuselesss/nix-ai-tools";
+    };
     nix-auto-follow = {
       url = "github:fzakaria/nix-auto-follow";
     };
