@@ -42,6 +42,9 @@ let
 
     # Require password for sudo
     security.sudo.wheelNeedsPassword = true;
+
+    # Increase timeout for home-manager activation (Doom Emacs can take a while)
+    systemd.services."home-manager-lessuseless".serviceConfig.TimeoutStartSec = "10min";
   };
 
   darwin.system.primaryUser = "lessuseless";
