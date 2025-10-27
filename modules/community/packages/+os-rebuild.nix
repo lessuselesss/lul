@@ -18,12 +18,13 @@
           platform = os.config.nixpkgs.hostPlatform;
           darwin-rebuild = lib.getExe inputs.nix-darwin.packages.${platform.system}.darwin-rebuild;
           nixos-rebuild = lib.getExe pkgs.nixos-rebuild;
+          nom = lib.getExe pkgs.nix-output-monitor;
           flake-param = ''--flake "path:${inputs.self}#${name}" '';
         in
         pkgs.writeShellApplication {
           name = "${name}-os-rebuild";
           text = ''
-            ${if platform.isDarwin then darwin-rebuild else nixos-rebuild} ${flake-param} "''${@}"
+            ${if platform.isDarwin then darwin-rebuild else nixos-rebuild} ${flake-param} --log-format internal-json -v "''${@}" |& ${nom} --json
           '';
         };
 
@@ -72,7 +73,7 @@
               fi
             ''}
 
-            "$hostname-os-rebuild" -L "''${@:-switch}"
+            "$hostname-os-rebuild" "''${@:-switch}"
           else
             echo "No configuration found for host: $hostname"
             exit 1

@@ -7,6 +7,11 @@
   nr = "nix run";
   nf = "fd --glob '*.nix' -X nixfmt {}";
 
+  # nom (nix-output-monitor) - better nix build output
+  nb = "nom build";
+  nsh = "nom shell";
+  ndev = "nom develop";
+
   # NixOS/Darwin rebuild
   nos = "nix run path:$HOME/.flake#os-rebuild -- switch";
   nob = "nix run path:$HOME/.flake#os-rebuild -- boot";

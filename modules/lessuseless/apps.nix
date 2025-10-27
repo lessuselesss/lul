@@ -69,6 +69,7 @@ let
         pkgs.home-manager
         pkgs.helix
         pkgs.television
+        pkgs.nix-output-monitor # Better nix build output
         selfpkgs.vic-sops-get
         selfpkgs.vic-sops-rotate
       ];
