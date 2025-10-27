@@ -82,7 +82,7 @@ The repository uses the **den pattern** for organizing hosts, users, and configu
     };
 
     # Host aspect (tachi example)
-    tachi.includes = { flake, ... }: with flake.aspects; [
+    tachi.includes = { aspects, ... }: with aspects; [
       preservation  # Feature aspects
       impermanence
       niri-desktop
@@ -150,7 +150,7 @@ Host aspects in `modules/aspects/[hostname].nix` define host-specific configurat
 {
   flake.aspects.tachi = {
     # Include feature aspects
-    includes = { flake, ... }: with flake.aspects; [
+    includes = { aspects, ... }: with aspects; [
       preservation
       impermanence
       disko
@@ -346,7 +346,7 @@ nix run .#write-flake
    {
      flake.aspects.[hostname] = {
        # Include feature aspects
-       includes = { flake, ... }: with flake.aspects; [
+       includes = { aspects, ... }: with aspects; [
          preservation
          impermanence
          # Add other feature aspects as needed
