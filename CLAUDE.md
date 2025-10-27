@@ -104,9 +104,11 @@ The repository uses the **den pattern** for organizing hosts, users, and configu
     };
 
     # Feature aspect (impermanence example)
+    # NOTE: Only provides NixOS-level support, no environment.persistence
     impermanence.nixos = {
-      imports = [ inputs.impermanence.nixosModules.impermanence ];
       fileSystems."/persist".neededForBoot = true;
+      users.mutableUsers = false;
+      programs.fuse.userAllowOther = true;
     };
   };
 }
@@ -239,6 +241,72 @@ sops modules/lessuseless/secrets.yaml
 ```
 
 Secrets are stored in `modules/lessuseless/secrets/` and `modules/lessuseless/secrets.yaml`.
+
+## Ephemeral System Architecture
+
+This configuration uses a **dual-layer ephemeral system** combining preservation (system-level) and impermanence (home-level):
+
+### System Level: Preservation
+
+**What it does:** Manages NixOS system state persistence in `/persist` using the [preservation](https://github.com/nix-community/preservation) module.
+
+**Configuration:**
+- Enabled via `preservation` aspect (`modules/aspects/features/preservation.nix`)
+- Per-host rules in `modules/hosts/[hostname]/preservation.nix`
+- Uses systemd-based initrd (required for preservation)
+- Persists critical system files like `/var/lib/nixos`, `/etc/machine-id`, NetworkManager connections
+
+**Example system-level preservation:**
+```nix
+preservation.preserveAt."/persist" = {
+  directories = [
+    { directory = "/var/lib/nixos"; inInitrd = true; }
+    { directory = "/etc/NetworkManager/system-connections"; }
+  ];
+  files = [
+    { file = "/etc/machine-id"; inInitrd = true; }
+  ];
+};
+```
+
+### Home Level: Impermanence
+
+**What it does:** Manages user home directory persistence using [impermanence](https://github.com/nix-community/impermanence) home-manager module.
+
+**Configuration:**
+- Enabled via `impermanence` aspect (NixOS settings only - no `environment.persistence`)
+- Per-user rules in `modules/lessuseless/impermanence.nix`
+- Uses `home.persistence."/persist/home/lessuseless"` (NOT `environment.persistence`)
+- Selectively persists user data, browser profiles, SSH keys, development tools
+
+**Key aspects:**
+- The `impermanence` aspect provides only NixOS-level support:
+  - `/persist` filesystem mounting (`fileSystems."/persist".neededForBoot = true`)
+  - Immutable users (`users.mutableUsers = false`)
+  - FUSE support (`programs.fuse.userAllowOther = true`)
+- The actual home-manager impermanence module is imported in user configs
+- Each user controls their own persistence rules
+
+**Example home-level impermanence:**
+```nix
+home.persistence."/persist/home/lessuseless" = {
+  directories = [
+    ".ssh"                    # SSH keys
+    ".mozilla/firefox"        # Browser data
+    ".config/gh"              # GitHub CLI auth
+  ];
+  files = [ ".bash_history" ];
+  allowOther = true;
+};
+```
+
+### Why This Design?
+
+**System (preservation):** Handles early-boot requirements and system state that must exist before user sessions.
+
+**Home (impermanence):** Gives users granular control over what persists in their home directory without needing system-level changes.
+
+**IMPORTANT:** Do NOT import `inputs.impermanence.nixosModules.impermanence` in the impermanence aspect or feature modules. This would create unwanted `environment.persistence` options at the NixOS level. We only use the home-manager module (`inputs.impermanence.homeManagerModules.impermanence`) in user configurations.
 
 ## Important Conventions
 
