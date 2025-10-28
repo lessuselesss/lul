@@ -99,31 +99,36 @@
             ''}
 
             # Security checks (non-blocking)
+            # Use printf with Unicode escape sequences for emoji at runtime
+            CHECKING=$(printf '\u26AA')  # ⚪
+            GREEN=$(printf '\U1F7E2')    # 🟢
+            YELLOW=$(printf '\U1F7E1')   # 🟡
+            RED=$(printf '\U1F534')      # 🔴
 
             # Check for leaked credentials in git history
             if command -v trufflehog &> /dev/null; then
-              printf "[..] Leaked Credentials"
+              printf "%s Leaked Credentials" "$CHECKING"
               TRUFFLEHOG_OUTPUT=$(trufflehog git file://. --only-verified --no-update 2>/dev/null)
               COUNT=$(echo "$TRUFFLEHOG_OUTPUT" | grep -c "Found verified result" || echo 0)
               if [ "$COUNT" -gt 0 ]; then
-                printf "\r\033[K\033[31m[XX]\033[0m Leaked Credentials - $COUNT\n"
+                printf "\r\033[K%s Leaked Credentials - %s\n" "$RED" "$COUNT"
                 echo "   → Run 'trufflehog git file://. --only-verified' for details"
               else
-                printf "\r\033[K\033[32m[OK]\033[0m Leaked Credentials - 0\n"
+                printf "\r\033[K%s Leaked Credentials - 0\n" "$GREEN"
               fi
             fi
 
             # Check passwords against HIBP database
             if command -v gopass-hibp &> /dev/null && command -v gopass &> /dev/null; then
-              printf "[..] Password Breaches"
+              printf "%s Password Breaches" "$CHECKING"
               HIBP_OUTPUT=$(gopass-hibp run 2>&1)
               HIBP_EXIT=$?
               COUNT=$(echo "$HIBP_OUTPUT" | grep -oP '\d+(?= passwords? (is|are) leaked)' | head -1 || echo 0)
               if [ "$HIBP_EXIT" -ne 0 ] && [ "$COUNT" -gt 0 ]; then
-                printf "\r\033[K\033[33m[!!]\033[0m Password Breaches - $COUNT\n"
+                printf "\r\033[K%s Password Breaches - %s\n" "$YELLOW" "$COUNT"
                 echo "   → Run 'gopass-hibp run' for details"
               else
-                printf "\r\033[K\033[32m[OK]\033[0m Password Breaches - 0\n"
+                printf "\r\033[K%s Password Breaches - 0\n" "$GREEN"
               fi
             fi
 
