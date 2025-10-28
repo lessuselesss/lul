@@ -73,6 +73,30 @@
               fi
             ''}
 
+            # Security checks (non-blocking)
+
+            # Check for leaked credentials in git history
+            if command -v trufflehog &> /dev/null; then
+              echo "🔍 Scanning for leaked credentials..."
+              if ! trufflehog git file://. --only-verified --fail --no-update 2>/dev/null; then
+                echo "⚠️  WARNING: Potential credentials detected in git history!"
+                echo "    Run 'trufflehog git file://. --only-verified' for details."
+              else
+                echo "✅ No leaked credentials detected"
+              fi
+            fi
+
+            # Check passwords against HIBP database
+            if command -v gopass-hibp &> /dev/null && command -v gopass &> /dev/null; then
+              echo "🔒 Checking passwords against HIBP database..."
+              if ! gopass-hibp run 2>/dev/null; then
+                echo "⚠️  WARNING: Some passwords found in known breaches!"
+                echo "    Run 'gopass-hibp run' for details and to update affected passwords."
+              else
+                echo "✅ All passwords clear"
+              fi
+            fi
+
             "$hostname-os-rebuild" "''${@:-switch}"
           else
             echo "No configuration found for host: $hostname"

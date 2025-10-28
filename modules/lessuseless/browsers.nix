@@ -82,6 +82,7 @@ in
         extensions = [
           { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # uBlock Origin
           { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
+          { id = "kkhfnlkhiapbiehimabddjbimfaijdhk"; } # Gopass Bridge
         ];
 
         commandLineArgs = [

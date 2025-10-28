@@ -36,22 +36,29 @@ let
           "gemini_eco_key" = { };
           "copilot_api_key" = { };
           "anthropic_api_key" = { };
-          # Binary secrets - add these later as needed
+
+          # SSH private keys (binary secrets)
+          "ssh/id_ed25519" = {
+            format = "binary";
+            sopsFile = ./secrets/mordor;
+          };
+          "ssh/gh_ed25519" = {
+            format = "binary";
+            sopsFile = ./secrets/gh_ed25519;
+          };
+          "ssh/localhost_run" = {
+            format = "binary";
+            sopsFile = ./secrets/localhost_run;
+          };
+
+          # Other binary secrets (commented for reference)
           # "edge.token" = {
           #   format = "binary";
           #   sopsFile = ./secrets/edge.token;
           # };
-          # "ssh/id_ed25519" = {
-          #   format = "binary";
-          #   sopsFile = ./secrets/mordor;
-          # };
           # "ssh/sops_ssh_config" = {
           #   format = "binary";
           #   sopsFile = ./secrets/ssh-conf;
-          # };
-          # "ssh/localhost_run" = {
-          #   format = "binary";
-          #   sopsFile = ./secrets/localhost_run;
           # };
         };
 

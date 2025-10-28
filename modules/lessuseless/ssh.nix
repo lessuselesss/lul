@@ -64,12 +64,14 @@ let
 
       services.ssh-agent.enable = pkgs.stdenv.isLinux;
 
-      # DISABLED: sops ssh secrets not set up yet
-      # Use your existing SSH keys instead
-      # home.activation.link-ssh-id = lib.hm.dag.entryAfter [ "link-flake" "sops-nix" "reloadSystemd" ] ''
-      #   run ln -sf "${config.sops.secrets."ssh/id_ed25519".path}" $HOME/.ssh/id_ed25519
-      #   run ln -sf "${config.sops.secrets."ssh/localhost_run".path}" $HOME/.ssh/id_localhost_run
-      # '';
+      # Link SOPS-encrypted SSH private keys to ~/.ssh
+      home.activation.link-ssh-id = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+        $DRY_RUN_CMD mkdir -p $HOME/.ssh
+        $DRY_RUN_CMD chmod 700 $HOME/.ssh
+        run ln -sf "${config.sops.secrets."ssh/id_ed25519".path}" $HOME/.ssh/id_ed25519
+        run ln -sf "${config.sops.secrets."ssh/gh_ed25519".path}" $HOME/.ssh/gh_ed25519
+        run ln -sf "${config.sops.secrets."ssh/localhost_run".path}" $HOME/.ssh/id_localhost_run
+      '';
     };
 in
 {

@@ -63,10 +63,11 @@
           directory = ".cache";
           method = "symlink";
         }
-        {
-          directory = ".ssh";
-          method = "symlink";
-        }
+        # .ssh is managed by SOPS secrets + dots.nix (not impermanence)
+        # {
+        #   directory = ".ssh";
+        #   method = "symlink";
+        # }
         {
           directory = ".gnupg";
           method = "symlink";
