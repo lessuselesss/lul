@@ -3,23 +3,6 @@
   flake.modules.homeManager.lessuseless =
     { pkgs, config, ... }:
     {
-      programs.gopass = {
-        enable = true;
-        settings = {
-          core = {
-            # Use age instead of GPG
-            autoimport = false;
-            exportkeys = false;
-            nopager = false;
-            notifications = true;
-          };
-          # Set age as the default crypto backend
-          age = {
-            usekeychain = false;
-          };
-        };
-      };
-
       home.packages = with pkgs; [
         gopass
         age  # Ensure age is available
