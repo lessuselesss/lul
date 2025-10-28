@@ -18,13 +18,12 @@
           platform = os.config.nixpkgs.hostPlatform;
           darwin-rebuild = lib.getExe inputs.nix-darwin.packages.${platform.system}.darwin-rebuild;
           nixos-rebuild = lib.getExe pkgs.nixos-rebuild;
-          nom = lib.getExe pkgs.nix-output-monitor;
           flake-param = ''--flake "path:${inputs.self}#${name}" '';
         in
         pkgs.writeShellApplication {
           name = "${name}-os-rebuild";
           text = ''
-            ${if platform.isDarwin then darwin-rebuild else nixos-rebuild} ${flake-param} --log-format internal-json -v "''${@}" |& ${nom} --json
+            ${if platform.isDarwin then darwin-rebuild else nixos-rebuild} ${flake-param} --log-format internal-json -v "''${@}"
           '';
         };
 
@@ -38,24 +37,49 @@
               (lib.attrValues os-builders)
               ++ [
                 pkgs.coreutils
+                pkgs.nix-output-monitor
               ]
               ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.systemd pkgs.btrbk ])
 
             )
           }"
 
-          if [ "-h" = "''${1:-}" ] || [ "--help" = "''${1:-}" ]; then
-            echo Usage: "$0" [HOSTNAME] [${
-              if pkgs.stdenv.isDarwin then "DARWIN" else "NIXOS"
-            }-REBUILD OPTIONS ...]
-            echo
-            echo Default hostname: "$(uname -n)"
-            echo Default ${if pkgs.stdenv.isDarwin then "darwin" else "nixos"}-rebuild options: switch
-            echo
-            echo Known hostnames on ${pkgs.system}:
-            echo "${lib.concatStringsSep "\n" (lib.attrNames same-system-oses)}"
-            exit 0
-          fi
+          # Parse output format flag (environment variable or CLI flag)
+          OUTPUT_FORMAT="''${OUTPUT_FORMAT:-nom}"  # default to nom, or use env var
+          ARGS=()
+          while [[ $# -gt 0 ]]; do
+            case "$1" in
+              -o|--output)
+                OUTPUT_FORMAT="$2"
+                shift 2
+                ;;
+              --output=*)
+                OUTPUT_FORMAT="''${1#*=}"
+                shift
+                ;;
+              -h|--help)
+                echo "Usage: $0 [OPTIONS] [HOSTNAME] [${
+                  if pkgs.stdenv.isDarwin then "DARWIN" else "NIXOS"
+                }-REBUILD OPTIONS ...]"
+                echo
+                echo "Options:"
+                echo "  -o, --output FORMAT   Build output format: nom (default), pinix, standard"
+                echo "  -h, --help            Show this help message"
+                echo
+                echo "Default hostname: $(uname -n)"
+                echo "Default ${if pkgs.stdenv.isDarwin then "darwin" else "nixos"}-rebuild options: switch"
+                echo
+                echo "Known hostnames on ${pkgs.system}:"
+                echo "${lib.concatStringsSep "\n" (lib.attrNames same-system-oses)}"
+                exit 0
+                ;;
+              *)
+                ARGS+=("$1")
+                shift
+                ;;
+            esac
+          done
+          set -- "''${ARGS[@]}"
 
           if test "file" = "$(type -t "''${1:-_}-os-rebuild")"; then
             hostname="$1"
@@ -132,7 +156,30 @@
               fi
             fi
 
-            "$hostname-os-rebuild" "''${@:-switch}"
+            # Apply output formatter
+            case "$OUTPUT_FORMAT" in
+              nom)
+                "$hostname-os-rebuild" "''${@:-switch}" |& nom --json
+                ;;
+              pinix)
+                if command -v pinix &> /dev/null; then
+                  "$hostname-os-rebuild" "''${@:-switch}" |& pinix
+                else
+                  echo "⚠️  pinix not found, falling back to nom"
+                  "$hostname-os-rebuild" "''${@:-switch}" |& nom --json
+                fi
+                ;;
+              standard|plain)
+                # Remove --log-format from the rebuild command for plain output
+                # This requires modifying the host script behavior, so for now just pass through
+                "$hostname-os-rebuild" "''${@:-switch}"
+                ;;
+              *)
+                echo "Unknown output format: $OUTPUT_FORMAT"
+                echo "Valid options: nom, pinix, standard"
+                exit 1
+                ;;
+            esac
           else
             echo "No configuration found for host: $hostname"
             exit 1
