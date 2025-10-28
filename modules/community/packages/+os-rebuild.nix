@@ -65,6 +65,31 @@
           fi
 
           if test "file" = "$(type -t "$hostname-os-rebuild")"; then
+            # Check for uncommitted changes in flake repository
+            if command -v git &> /dev/null && git -C "${inputs.self}" rev-parse --git-dir &> /dev/null; then
+              if ! git -C "${inputs.self}" diff --quiet || ! git -C "${inputs.self}" diff --cached --quiet; then
+                echo "⚠️  WARNING: Git tree has uncommitted changes"
+                echo ""
+                echo "📝 Modified files:"
+                git -C "${inputs.self}" status --short | head -10
+                echo ""
+                echo "💡 Tip: Files must be committed for Nix to see them (especially new secrets)."
+                echo "    Run: git add <files> && git commit -m 'description'"
+                echo ""
+              fi
+
+              if git -C "${inputs.self}" ls-files --others --exclude-standard | grep -q .; then
+                echo "⚠️  WARNING: Untracked files detected"
+                echo ""
+                echo "📝 Untracked files:"
+                git -C "${inputs.self}" ls-files --others --exclude-standard | head -10
+                echo ""
+                echo "💡 Tip: New files must be committed before Nix can use them."
+                echo "    Run: git add <files> && git commit -m 'description'"
+                echo ""
+              fi
+            fi
+
             # Take a pre-rebuild snapshot on Linux systems with btrbk
             ${lib.optionalString pkgs.stdenv.isLinux ''
               if command -v btrbk &> /dev/null && systemctl is-active --quiet btrbk-time-machine.service 2>/dev/null || true; then
