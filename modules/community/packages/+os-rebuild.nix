@@ -102,23 +102,23 @@
 
             # Check for leaked credentials in git history
             if command -v trufflehog &> /dev/null; then
-              printf "🔍 Scanning for leaked credentials..."
+              printf "🔍 Leaked Credentials - Scanning..."
               if ! trufflehog git file://. --only-verified --fail --no-update 2>/dev/null; then
-                printf "\r\033[K⚠️  WARNING: Potential credentials detected in git history!\n"
+                printf "\r\033[K⚠️  Leaked Credentials - Found in git history!\n"
                 echo "    Run 'trufflehog git file://. --only-verified' for details."
               else
-                printf "\r\033[K✅ No leaked credentials detected\n"
+                printf "\r\033[K✅ Leaked Credentials - None detected\n"
               fi
             fi
 
             # Check passwords against HIBP database
             if command -v gopass-hibp &> /dev/null && command -v gopass &> /dev/null; then
-              printf "🔒 Checking passwords against HIBP database..."
+              printf "🔒 Password Breaches - Checking..."
               if ! gopass-hibp run 2>/dev/null; then
-                printf "\r\033[K⚠️  WARNING: Some passwords found in known breaches!\n"
+                printf "\r\033[K⚠️  Password Breaches - Some passwords compromised!\n"
                 echo "    Run 'gopass-hibp run' for details and to update affected passwords."
               else
-                printf "\r\033[K✅ All passwords clear\n"
+                printf "\r\033[K✅ Password Breaches - All clear\n"
               fi
             fi
 
