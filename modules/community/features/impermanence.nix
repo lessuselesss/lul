@@ -15,7 +15,7 @@
     # Disable mutable users for impermanence setup
     users.mutableUsers = false;
 
-    # Enable FUSE user_allow_other for home-manager impermanence mounts
-    programs.fuse.userAllowOther = true;
+    # NOTE: FUSE/bindfs disabled - using symlink method instead
+    # programs.fuse.userAllowOther = true;
   };
 }

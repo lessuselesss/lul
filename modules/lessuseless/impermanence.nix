@@ -44,7 +44,7 @@ in
         (withSymlink ".config/configstore")     # Runtime app configs
         # NOTE: .config/Cursor - only contains HM-managed symlinks (settings.json/keybindings.json), don't persist
         (withSymlink ".config/dconf")           # GTK/GNOME settings - HM may manage
-        (withSymlink ".config/direnv")          # TODO: Check if HM manages
+        # NOTE: .config/direnv - HM manages lib/ files (use_nix_installables.sh, etc), only symlinks here. Real state in .local/share/direnv
         # .config/doom - managed by HM via dots.nix (symlink), don't persist
         (withSymlink ".config/emacs")           # Emacs runtime state (doom uses this)
         (withSymlink ".config/enchant")         # Spell checking config
