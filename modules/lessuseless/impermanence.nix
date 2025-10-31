@@ -40,9 +40,9 @@ in
         (withSymlink ".config/BeeperTexts")     # TODO: check if HM manages
         (withSymlink ".config/chromium")        # Browser - HM manages extensions, keep for sessions/cookies
         (withSymlink ".config/claude")          # Claude CLI config
-        (withSymlink ".config/Code")            # VS Code - HM manages settings.json/keybindings.json, keep for extensions state
+        # NOTE: .config/Code - only contains HM-managed symlinks (settings.json/keybindings.json), don't persist
         (withSymlink ".config/configstore")     # Runtime app configs
-        (withSymlink ".config/Cursor")          # Cursor editor - HM manages settings, keep for state
+        # NOTE: .config/Cursor - only contains HM-managed symlinks (settings.json/keybindings.json), don't persist
         (withSymlink ".config/dconf")           # GTK/GNOME settings - HM may manage
         (withSymlink ".config/direnv")          # TODO: Check if HM manages
         # .config/doom - managed by HM via dots.nix (symlink), don't persist

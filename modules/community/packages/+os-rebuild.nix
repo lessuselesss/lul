@@ -89,6 +89,17 @@
           fi
 
           if test "file" = "$(type -t "$hostname-os-rebuild")"; then
+            # Check if this is a dry-run (non-destructive operation)
+            IS_DRY_RUN=false
+            for arg in "$@"; do
+              case "$arg" in
+                dry-build|dry-run|build-vm|build-vm-with-bootloader)
+                  IS_DRY_RUN=true
+                  break
+                  ;;
+              esac
+            done
+
             # Check for uncommitted changes in flake repository
             if command -v git &> /dev/null && git -C "${inputs.self}" rev-parse --git-dir &> /dev/null; then
               if ! git -C "${inputs.self}" diff --quiet || ! git -C "${inputs.self}" diff --cached --quiet; then
@@ -114,11 +125,29 @@
               fi
             fi
 
-            # Take a pre-rebuild snapshot on Linux systems with btrbk
+            # Take a pre-rebuild snapshot on Linux systems with btrbk (skip for dry-runs)
             ${lib.optionalString pkgs.stdenv.isLinux ''
-              if command -v btrbk &> /dev/null && systemctl is-active --quiet btrbk-time-machine.service 2>/dev/null || true; then
-                echo "📸 Creating pre-rebuild snapshot..."
-                systemctl start btrbk-time-machine.service || echo "⚠️  Snapshot failed, continuing with rebuild..."
+              if [ "$IS_DRY_RUN" = false ]; then
+                # Detect filesystem type
+                ROOT_FS=$(findmnt -n -o FSTYPE / 2>/dev/null || echo "unknown")
+
+                if [ "$ROOT_FS" = "btrfs" ]; then
+                  echo "💾 BTRFS detected"
+                  if command -v btrbk &> /dev/null && systemctl is-active --quiet btrbk-time-machine.service 2>/dev/null; then
+                    echo "  📸 Creating pre-rebuild snapshot..."
+                    if systemctl start btrbk-time-machine.service 2>/dev/null; then
+                      echo "  ✅ Snapshot created successfully"
+                    else
+                      echo "  ⚠️  Snapshot failed, continuing with rebuild..."
+                    fi
+                  else
+                    echo "  ℹ️  btrbk not configured, skipping snapshot"
+                  fi
+                else
+                  echo "❌ $ROOT_FS detected, snapshots not supported"
+                fi
+              else
+                echo "🔍 Dry-run mode: Skipping pre-rebuild snapshot"
               fi
             ''}
 
