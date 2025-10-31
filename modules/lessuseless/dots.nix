@@ -15,13 +15,10 @@
         fi
       '';
 
-      # SSH public keys (private keys are managed by SOPS in secrets.nix)
-      home.file.".ssh/authorized_keys".source = dotsLink "ssh/authorized_keys";
-      home.file.".ssh/gh_ed25519.pub".source = dotsLink "ssh/gh_ed25519.pub";
-      home.file.".ssh/id_ed25519.pub".source = dotsLink "ssh/id_ed25519.pub";
-      home.file.".ssh/id_localhost_run.pub".source = dotsLink "ssh/id_localhost_run.pub";
-      home.file.".ssh/nix_versions_ed25519.pub".source = dotsLink "ssh/nix_versions_ed25519.pub";
-      home.file.".ssh/vix_ed25519.pub".source = dotsLink "ssh/vix_ed25519.pub";
+      home.file.".ssh" = {
+        recursive = true;
+        source = ./dots/ssh;
+      };
 
       home.file.".config/niri".source = dotsLink "config/niri";
       home.file.".config/nvim".source = dotsLink "config/nvim";

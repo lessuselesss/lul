@@ -5,17 +5,17 @@
       enable = true;
 
       defaultApplications = {
-        # Web browsers
-        "text/html" = "org.qutebrowser.qutebrowser.desktop";
-        "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
-        "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
-        "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
-        "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
+        # Web browsers - using chromium as default
+        "text/html" = "chromium-browser.desktop";
+        "x-scheme-handler/http" = "chromium-browser.desktop";
+        "x-scheme-handler/https" = "chromium-browser.desktop";
+        "x-scheme-handler/about" = "chromium-browser.desktop";
+        "x-scheme-handler/unknown" = "chromium-browser.desktop";
 
-        # Alternative: Use chromium instead
-        # "text/html" = "chromium-browser.desktop";
-        # "x-scheme-handler/http" = "chromium-browser.desktop";
-        # "x-scheme-handler/https" = "chromium-browser.desktop";
+        # Alternative: Use qutebrowser instead
+        # "text/html" = "org.qutebrowser.qutebrowser.desktop";
+        # "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
+        # "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
 
         # Email (uncomment if you install a mail client)
         # "x-scheme-handler/mailto" = "thunderbird.desktop";
@@ -30,18 +30,18 @@
       };
 
       associations.added = {
-        # Add chromium as an alternative browser
+        # Add qutebrowser as an alternative browser
         "text/html" = [
-          "org.qutebrowser.qutebrowser.desktop"
           "chromium-browser.desktop"
+          "org.qutebrowser.qutebrowser.desktop"
         ];
         "x-scheme-handler/http" = [
-          "org.qutebrowser.qutebrowser.desktop"
           "chromium-browser.desktop"
+          "org.qutebrowser.qutebrowser.desktop"
         ];
         "x-scheme-handler/https" = [
-          "org.qutebrowser.qutebrowser.desktop"
           "chromium-browser.desktop"
+          "org.qutebrowser.qutebrowser.desktop"
         ];
       };
     };

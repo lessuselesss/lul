@@ -21,6 +21,9 @@
       '';
       home.file.".config/fish/conf.d/tvtab.fish".source = ./_fish/tv.fish;
 
+      # Claude Code completions
+      home.file.".config/fish/completions/claude.fish".source = ./_fish/claude-completions.fish;
+
       programs.fzf.enable = true;
       programs.fzf.enableFishIntegration = true;
 

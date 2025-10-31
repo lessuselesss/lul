@@ -6,9 +6,9 @@
     nixConfig = {
       allow-import-from-derivation = true;
       extra-trusted-public-keys = [
-        "vix.cachix.org-1:hP/Lpdsi1dB3AxK9o6coWh+xHzvAc4ztdDYuG7lC6dI="
+        "lul.cachix.org-1:du306UACvYmVfHgEtPd2XoPszPmgB9UyWk3iB+6ZYwE="
       ];
-      extra-substituters = [ "https://vix.cachix.org" ];
+      extra-substituters = [ "https://lul.cachix.org" ];
     };
   };
 
