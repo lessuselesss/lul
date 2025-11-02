@@ -42,8 +42,19 @@ let
         initialHashedPassword = "$6$.K.oyv.fU6Gqu1ov$aia2TQleZO1L7VhUS6XoBAf08ZXx7ATE42B6/l0G5YGrwbUT0eOZDTuSHAmAHW3L50mBVcyh3m3Fk7ndq9Jby/";
       };
 
-      # Require password for sudo
+      # Require password for sudo, except for nixos-rebuild (protected by Claude Code hook)
       security.sudo.wheelNeedsPassword = true;
+      security.sudo.extraRules = [
+        {
+          users = [ "lessuseless" ];
+          commands = [
+            {
+              command = "/run/current-system/sw/bin/nixos-rebuild";
+              options = [ "NOPASSWD" ];
+            }
+          ];
+        }
+      ];
 
       # Increase timeout for home-manager activation (Doom Emacs can take a while)
       systemd.services."home-manager-lessuseless".serviceConfig.TimeoutStartSec = lib.mkForce "10min";
