@@ -38,7 +38,8 @@ in
         # === .config subdirectories (alphabetically) ===
         # TODO: Mark which are managed by home-manager vs runtime state
         (withSymlink ".config/BeeperTexts")     # TODO: check if HM manages
-        (withSymlink ".config/chromium")        # Browser - HM manages extensions, keep for sessions/cookies
+        # NOTE: .config/chromium - persist Default profile for state, but not External Extensions (HM-managed)
+        (withSymlink ".config/chromium/Default")              # Browser profile (cookies, sessions, bookmarks, history)
         (withSymlink ".config/claude")          # Claude CLI config
         # NOTE: .config/Code - only contains HM-managed symlinks (settings.json/keybindings.json), don't persist
         (withSymlink ".config/configstore")     # Runtime app configs
