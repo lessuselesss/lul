@@ -136,7 +136,7 @@
 
                   # Check if btrbk is installed and configured
                   if command -v btrbk &> /dev/null; then
-                    BTRBK_CONF="/etc/btrbk/btrbk-time-machine.conf"
+                    BTRBK_CONF="/etc/btrbk/time-machine.conf"
 
                     if [ -f "$BTRBK_CONF" ]; then
                       echo ""
