@@ -148,7 +148,7 @@ in
         # NOTE: .cursor/extensions - HM manages extensions.json, don't persist directory
 
         # === .vscode subdirectories ===
-        (withSymlink ".vscode/extensions")     # VS Code extensions
+        # NOTE: .vscode/extensions - HM manages extensions.json, don't persist directory
 
         # === .vscode-server subdirectories ===
         (withSymlink ".vscode-server/bin")     # VS Code remote server binaries
@@ -199,20 +199,13 @@ in
         ".npm/_update-notifier-last-checked"   # NPM update checker timestamp
 
         # === .ssh files (SECRETS) ===
-        ".ssh/authorized_keys"                 # SSH authorized public keys
-        ".ssh/config"                          # SSH client configuration
+        # NOTE: Home-manager manages .ssh directory recursively via dots.nix
+        # Only persist private keys and state files (public keys come from HM)
         ".ssh/gh_ed25519"                      # GitHub SSH private key (SECRET)
-        ".ssh/gh_ed25519.pub"                  # GitHub SSH public key
-        ".ssh/gh_ed25519.pub.backup"           # GitHub SSH public key backup
         ".ssh/id_ed25519"                      # Default SSH private key (SECRET)
-        ".ssh/id_ed25519.pub"                  # Default SSH public key
-        ".ssh/id_ed25519.pub.backup"           # Default SSH public key backup
         ".ssh/id_localhost_run"                # Localhost run SSH private key (SECRET)
-        ".ssh/id_localhost_run.pub"            # Localhost run SSH public key
         ".ssh/known_hosts"                     # SSH known hosts fingerprints
         ".ssh/known_hosts.old"                 # SSH known hosts backup
-        ".ssh/nix_versions_ed25519.pub"        # Nix versions SSH public key
-        ".ssh/vix_ed25519.pub"                 # Vix SSH public key
 
         # === .w3m files ===
         ".w3m/history"                         # w3m browser history
