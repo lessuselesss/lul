@@ -109,7 +109,7 @@ in
         # Most caches can regenerate, but some are expensive or contain sessions
         (withSymlink ".cache/chromium")        # Browser cache (sessions may be here)
         (withSymlink ".cache/nix")             # Nix evaluation cache (faster rebuilds)
-        (withSymlink ".cache/nix-index")       # nix-locate database (30min to rebuild)
+        # NOTE: .cache/nix-index - HM manages files symlink, don't persist (database rebuilt by HM)
         (withSymlink ".cache/spotify")         # Spotify downloaded music + keys
         (withSymlink ".cache/uv")              # UV Python tool cache
 
