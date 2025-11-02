@@ -49,18 +49,18 @@ in
         (withSymlink ".config/emacs")           # Emacs runtime state (doom uses this)
         (withSymlink ".config/enchant")         # Spell checking config
         (withSymlink ".config/environment.d")   # Environment variables
-        (withSymlink ".config/evolution")       # Evolution email
+        # NOTE: .config/evolution - empty directory, don't persist
         # NOTE: .config/fish - HM manages config/functions/completions/conf.d, only persist fish_variables (in files section)
         (withSymlink ".config/gh")              # GitHub CLI - OAuth tokens (secrets)
         # .config/ghostty - managed by HM via dots.nix (symlink), don't persist
-        (withSymlink ".config/ghostty.backup")  # Backup of ghostty config
+        # NOTE: .config/ghostty.backup - empty directory, don't persist
         (withSymlink ".config/git")             # Git config - TODO: check if HM manages
         (withSymlink ".config/go")              # Go language config
         (withSymlink ".config/google-chrome")   # Chrome browser
-        (withSymlink ".config/helix")           # Helix editor
+        # NOTE: .config/helix - empty directory, don't persist
         # NOTE: .config/jj - HM manages config.toml, only symlinks here
         # NOTE: .config/jjui - HM manages config.toml, only symlinks here
-        (withSymlink ".config/luakit")          # Luakit browser
+        # NOTE: .config/luakit - empty directory, don't persist (browser data in .local/share/luakit)
         (withSymlink ".config/lul")             # THIS REPO - flake config
         (withSymlink ".config/lul-bak")         # Backup of lul config
         (withSymlink ".config/lul-old-new")     # Backup of lul config
@@ -72,7 +72,7 @@ in
         (withSymlink ".config/qutebrowser")     # Qutebrowser - HM manages config.py, keep for sessions
         (withSymlink ".config/sops")            # SOPS age keys (secrets)
         (withSymlink ".config/sops-nix")        # SOPS-nix state
-        (withSymlink ".config/systemd")         # User systemd services - HM may create services here
+        # NOTE: .config/systemd - contains old bindMount service symlinks from FUSE config, HM manages services, don't persist
         (withSymlink ".config/television")      # Television app
         # .config/wezterm - managed by HM via dots.nix (symlink), don't persist
         # .config/zed - managed by HM via dots.nix (symlink), don't persist
