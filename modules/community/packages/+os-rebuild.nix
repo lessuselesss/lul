@@ -133,15 +133,66 @@
 
                 if [ "$ROOT_FS" = "btrfs" ]; then
                   echo "💾 BTRFS detected"
-                  if command -v btrbk &> /dev/null && systemctl is-active --quiet btrbk-time-machine.service 2>/dev/null; then
-                    echo "  📸 Creating pre-rebuild snapshot..."
-                    if systemctl start btrbk-time-machine.service 2>/dev/null; then
-                      echo "  ✅ Snapshot created successfully"
+
+                  # Check if btrbk is installed and configured
+                  if command -v btrbk &> /dev/null; then
+                    BTRBK_CONF="/etc/btrbk/btrbk-time-machine.conf"
+
+                    if [ -f "$BTRBK_CONF" ]; then
+                      echo ""
+                      echo "📋 Snapshot Configuration:"
+
+                      # Parse and display subvolumes that will be snapshotted
+                      SUBVOLS=$(grep -E '^\s+subvolume\s+' "$BTRBK_CONF" 2>/dev/null | awk '{print $2}' || echo "")
+                      if [ -n "$SUBVOLS" ]; then
+                        echo "   Subvolumes to snapshot:"
+                        for subvol in $SUBVOLS; do
+                          echo "   • /$subvol → /.snapshots/$subvol"
+                        done
+                      fi
+
+                      echo ""
+                      echo "  📸 Creating pre-rebuild snapshot..."
+
+                      # Run btrbk to create snapshots
+                      if btrbk -c "$BTRBK_CONF" run 2>&1 | grep -E '(snapshot|created|skipped)'; then
+                        echo ""
+                        echo "  🔍 Verifying snapshots..."
+
+                        # Verify each snapshot was created
+                        VERIFIED=0
+                        FAILED=0
+                        for subvol in $SUBVOLS; do
+                          SNAPSHOT_DIR="/.snapshots/$subvol"
+                          if [ -d "$SNAPSHOT_DIR" ]; then
+                            LATEST=$(ls -t "$SNAPSHOT_DIR" 2>/dev/null | head -1)
+                            if [ -n "$LATEST" ]; then
+                              echo "     ✅ /$subvol: $LATEST"
+                              VERIFIED=$((VERIFIED + 1))
+                            else
+                              echo "     ⚠️  /$subvol: no snapshots found"
+                              FAILED=$((FAILED + 1))
+                            fi
+                          else
+                            echo "     ⚠️  /$subvol: snapshot directory missing"
+                            FAILED=$((FAILED + 1))
+                          fi
+                        done
+
+                        echo ""
+                        if [ "$VERIFIED" -gt 0 ]; then
+                          echo "  ✅ Snapshot verification: $VERIFIED verified, $FAILED warnings"
+                        else
+                          echo "  ⚠️  No snapshots verified, continuing with rebuild..."
+                        fi
+                      else
+                        echo "  ⚠️  Snapshot creation had issues, continuing with rebuild..."
+                      fi
                     else
-                      echo "  ⚠️  Snapshot failed, continuing with rebuild..."
+                      echo "  ℹ️  btrbk config not found at $BTRBK_CONF, skipping snapshot"
                     fi
                   else
-                    echo "  ℹ️  btrbk not configured, skipping snapshot"
+                    echo "  ℹ️  btrbk not installed, skipping snapshot"
                   fi
                 else
                   echo "❌ $ROOT_FS detected, snapshots not supported"
