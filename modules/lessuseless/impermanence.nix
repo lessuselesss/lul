@@ -55,7 +55,7 @@ in
         (withSymlink ".config/gh")              # GitHub CLI - OAuth tokens (secrets)
         # .config/ghostty - managed by HM via dots.nix (symlink), don't persist
         # NOTE: .config/ghostty.backup - empty directory, don't persist
-        (withSymlink ".config/git")             # Git config - TODO: check if HM manages
+        # NOTE: .config/git - HM manages config and ignore files, only symlinks here
         (withSymlink ".config/go")              # Go language config
         (withSymlink ".config/google-chrome")   # Chrome browser
         # NOTE: .config/helix - empty directory, don't persist
