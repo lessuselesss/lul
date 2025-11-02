@@ -49,7 +49,7 @@ in
         # .config/doom - managed by HM via dots.nix (symlink), don't persist
         (withSymlink ".config/emacs")           # Emacs runtime state (doom uses this)
         (withSymlink ".config/enchant")         # Spell checking config
-        (withSymlink ".config/environment.d")   # Environment variables
+        # NOTE: .config/environment.d - HM manages 10-home-manager.conf, don't persist
         # NOTE: .config/evolution - empty directory, don't persist
         # NOTE: .config/fish - HM manages config/functions/completions/conf.d, only persist fish_variables (in files section)
         (withSymlink ".config/gh")              # GitHub CLI - OAuth tokens (secrets)

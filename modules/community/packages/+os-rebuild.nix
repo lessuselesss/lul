@@ -29,6 +29,11 @@
 
       os-builders = lib.mapAttrs os-builder same-system-oses;
 
+      # Tool paths for snapshot script
+      awk = lib.getExe pkgs.gawk;
+      grep = lib.getExe pkgs.gnugrep;
+      find = lib.getExe' pkgs.findutils "find";
+
       os-rebuild = pkgs.writeShellApplication {
         name = "os-rebuild";
         text = ''
@@ -143,7 +148,7 @@
                       echo "📋 Snapshot Configuration:"
 
                       # Parse and display subvolumes that will be snapshotted
-                      SUBVOLS=$(grep -E '^\s+subvolume\s+' "''${BTRBK_CONF}" 2>/dev/null | awk '{print $2}' || echo "")
+                      SUBVOLS=$(${grep} -E '^\s+subvolume\s+' "''${BTRBK_CONF}" 2>/dev/null | ${awk} '{print $2}' || echo "")
                       if [ -n "''${SUBVOLS}" ]; then
                         echo "   Subvolumes to snapshot:"
                         for subvol in ''${SUBVOLS}; do
@@ -155,7 +160,7 @@
                       echo "  📸 Creating pre-rebuild snapshot..."
 
                       # Run btrbk to create snapshots
-                      if btrbk -c "''${BTRBK_CONF}" run 2>&1 | grep -E '(snapshot|created|skipped)'; then
+                      if btrbk -c "''${BTRBK_CONF}" run 2>&1 | ${grep} -E '(snapshot|created|skipped)'; then
                         echo ""
                         echo "  🔍 Verifying snapshots..."
 
@@ -165,7 +170,7 @@
                         for subvol in ''${SUBVOLS}; do
                           # Find the most recent snapshot for this subvolume
                           # btrbk creates snapshots as /.snapshots/SUBVOL.TIMESTAMP
-                          LATEST=$(find /.snapshots -maxdepth 1 -type d -name "''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
+                          LATEST=$(${find} /.snapshots -maxdepth 1 -type d -name "''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
                           if [ -n "''${LATEST}" ]; then
                             echo "     ✅ /''${subvol}: ''${LATEST}"
                             VERIFIED=$((VERIFIED + 1))
