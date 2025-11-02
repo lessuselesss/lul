@@ -50,7 +50,7 @@ in
         (withSymlink ".config/enchant")         # Spell checking config
         (withSymlink ".config/environment.d")   # Environment variables
         (withSymlink ".config/evolution")       # Evolution email
-        (withSymlink ".config/fish")            # Fish shell - HM manages config, keep for history/variables
+        # NOTE: .config/fish - HM manages config/functions/completions/conf.d, only persist fish_variables (in files section)
         (withSymlink ".config/gh")              # GitHub CLI - OAuth tokens (secrets)
         # .config/ghostty - managed by HM via dots.nix (symlink), don't persist
         (withSymlink ".config/ghostty.backup")  # Backup of ghostty config
@@ -162,6 +162,7 @@ in
         # === .config files (EXCEPTION: .config has special rule - only these files) ===
         # NOTE: .config/mimeapps.list - managed by home-manager elsewhere, don't persist
         ".config/pavucontrol.ini"              # PulseAudio volume control settings
+        ".config/fish/fish_variables"          # Fish shell variables and history (HM manages config/functions/completions)
 
         # === .anydesk files ===
         ".anydesk/.anydesk.trace"              # AnyDesk trace log
