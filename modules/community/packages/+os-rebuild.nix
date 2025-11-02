@@ -127,27 +127,27 @@
 
             # Take a pre-rebuild snapshot on Linux systems with btrbk (skip for dry-runs)
             ${lib.optionalString pkgs.stdenv.isLinux ''
-              if [ "$IS_DRY_RUN" = false ]; then
+              if [ "''${IS_DRY_RUN}" = false ]; then
                 # Detect filesystem type
                 ROOT_FS=$(findmnt -n -o FSTYPE / 2>/dev/null || echo "unknown")
 
-                if [ "$ROOT_FS" = "btrfs" ]; then
+                if [ "''${ROOT_FS}" = "btrfs" ]; then
                   echo "💾 BTRFS detected"
 
                   # Check if btrbk is installed and configured
                   if command -v btrbk &> /dev/null; then
                     BTRBK_CONF="/etc/btrbk/time-machine.conf"
 
-                    if [ -f "$BTRBK_CONF" ]; then
+                    if [ -f "''${BTRBK_CONF}" ]; then
                       echo ""
                       echo "📋 Snapshot Configuration:"
 
                       # Parse and display subvolumes that will be snapshotted
-                      SUBVOLS=$(grep -E '^\s+subvolume\s+' "$BTRBK_CONF" 2>/dev/null | awk '{print $2}' || echo "")
-                      if [ -n "$SUBVOLS" ]; then
+                      SUBVOLS=$(grep -E '^\s+subvolume\s+' "''${BTRBK_CONF}" 2>/dev/null | awk '{print $2}' || echo "")
+                      if [ -n "''${SUBVOLS}" ]; then
                         echo "   Subvolumes to snapshot:"
-                        for subvol in $SUBVOLS; do
-                          echo "   • /$subvol → /.snapshots/$subvol"
+                        for subvol in ''${SUBVOLS}; do
+                          echo "   • /''${subvol} → /.snapshots/''${subvol}"
                         done
                       fi
 
@@ -155,29 +155,29 @@
                       echo "  📸 Creating pre-rebuild snapshot..."
 
                       # Run btrbk to create snapshots
-                      if btrbk -c "$BTRBK_CONF" run 2>&1 | grep -E '(snapshot|created|skipped)'; then
+                      if btrbk -c "''${BTRBK_CONF}" run 2>&1 | grep -E '(snapshot|created|skipped)'; then
                         echo ""
                         echo "  🔍 Verifying snapshots..."
 
                         # Verify each snapshot was created
                         VERIFIED=0
                         FAILED=0
-                        for subvol in $SUBVOLS; do
+                        for subvol in ''${SUBVOLS}; do
                           # Find the most recent snapshot for this subvolume
                           # btrbk creates snapshots as /.snapshots/SUBVOL.TIMESTAMP
-                          LATEST=$(find /.snapshots -maxdepth 1 -type d -name "${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
-                          if [ -n "$LATEST" ]; then
-                            echo "     ✅ /$subvol: $LATEST"
+                          LATEST=$(find /.snapshots -maxdepth 1 -type d -name "''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
+                          if [ -n "''${LATEST}" ]; then
+                            echo "     ✅ /''${subvol}: ''${LATEST}"
                             VERIFIED=$((VERIFIED + 1))
                           else
-                            echo "     ⚠️  /$subvol: no snapshots found"
+                            echo "     ⚠️  /''${subvol}: no snapshots found"
                             FAILED=$((FAILED + 1))
                           fi
                         done
 
                         echo ""
-                        if [ "$VERIFIED" -gt 0 ]; then
-                          echo "  ✅ Snapshot verification: $VERIFIED verified, $FAILED warnings"
+                        if [ "''${VERIFIED}" -gt 0 ]; then
+                          echo "  ✅ Snapshot verification: ''${VERIFIED} verified, ''${FAILED} warnings"
                         else
                           echo "  ⚠️  No snapshots verified, continuing with rebuild..."
                         fi
@@ -185,13 +185,13 @@
                         echo "  ⚠️  Snapshot creation had issues, continuing with rebuild..."
                       fi
                     else
-                      echo "  ℹ️  btrbk config not found at $BTRBK_CONF, skipping snapshot"
+                      echo "  ℹ️  btrbk config not found at ''${BTRBK_CONF}, skipping snapshot"
                     fi
                   else
                     echo "  ℹ️  btrbk not installed, skipping snapshot"
                   fi
                 else
-                  echo "❌ $ROOT_FS detected, snapshots not supported"
+                  echo "❌ ''${ROOT_FS} detected, snapshots not supported"
                 fi
               else
                 echo "🔍 Dry-run mode: Skipping pre-rebuild snapshot"
