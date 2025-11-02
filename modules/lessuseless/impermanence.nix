@@ -58,8 +58,8 @@ in
         (withSymlink ".config/go")              # Go language config
         (withSymlink ".config/google-chrome")   # Chrome browser
         (withSymlink ".config/helix")           # Helix editor
-        (withSymlink ".config/jj")              # Jujutsu VCS
-        (withSymlink ".config/jjui")            # Jujutsu UI - HM manages config.toml
+        # NOTE: .config/jj - HM manages config.toml, only symlinks here
+        # NOTE: .config/jjui - HM manages config.toml, only symlinks here
         (withSymlink ".config/luakit")          # Luakit browser
         (withSymlink ".config/lul")             # THIS REPO - flake config
         (withSymlink ".config/lul-bak")         # Backup of lul config
