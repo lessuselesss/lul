@@ -145,7 +145,7 @@ in
         (withSymlink ".pki/nssdb")             # NSS certificate database (Chrome/Firefox certs)
 
         # === .cursor subdirectories ===
-        (withSymlink ".cursor/extensions")     # Cursor editor extensions
+        # NOTE: .cursor/extensions - HM manages extensions.json, don't persist directory
 
         # === .vscode subdirectories ===
         (withSymlink ".vscode/extensions")     # VS Code extensions
