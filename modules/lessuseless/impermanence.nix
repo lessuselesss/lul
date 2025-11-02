@@ -66,7 +66,7 @@ in
         (withSymlink ".config/lul-bak")         # Backup of lul config
         (withSymlink ".config/lul-old-new")     # Backup of lul config
         # .config/niri - managed by HM via dots.nix (symlink), don't persist
-        (withSymlink ".config/nix")             # Nix config - HM manages nix.conf, keep for runtime
+        # NOTE: .config/nix - HM manages registry.json, only persist nix.conf file (in files section)
         # .config/nvim - managed by HM via dots.nix (symlink), don't persist
         (withSymlink ".config/pulse")           # PulseAudio settings
         (withSymlink ".config/quickshell")      # Quickshell config
@@ -164,6 +164,7 @@ in
         # NOTE: .config/mimeapps.list - managed by home-manager elsewhere, don't persist
         ".config/pavucontrol.ini"              # PulseAudio volume control settings
         ".config/fish/fish_variables"          # Fish shell variables and history (HM manages config/functions/completions)
+        ".config/nix/nix.conf"                 # Nix user config (HM manages registry.json)
 
         # === .anydesk files ===
         ".anydesk/.anydesk.trace"              # AnyDesk trace log

@@ -152,7 +152,7 @@
                       if [ -n "''${SUBVOLS}" ]; then
                         echo "   Subvolumes to snapshot:"
                         for subvol in ''${SUBVOLS}; do
-                          echo "   • /''${subvol} → /.snapshots/''${subvol}"
+                          echo "   • /''${subvol} → /.snapshots/.''${subvol}.*"
                         done
                       fi
 
