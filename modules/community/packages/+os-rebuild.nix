@@ -163,18 +163,14 @@
                         VERIFIED=0
                         FAILED=0
                         for subvol in $SUBVOLS; do
-                          SNAPSHOT_DIR="/.snapshots/$subvol"
-                          if [ -d "$SNAPSHOT_DIR" ]; then
-                            LATEST=$(ls -t "$SNAPSHOT_DIR" 2>/dev/null | head -1)
-                            if [ -n "$LATEST" ]; then
-                              echo "     ✅ /$subvol: $LATEST"
-                              VERIFIED=$((VERIFIED + 1))
-                            else
-                              echo "     ⚠️  /$subvol: no snapshots found"
-                              FAILED=$((FAILED + 1))
-                            fi
+                          # Find the most recent snapshot for this subvolume
+                          # btrbk creates snapshots as /.snapshots/SUBVOL.TIMESTAMP
+                          LATEST=$(find /.snapshots -maxdepth 1 -type d -name "${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
+                          if [ -n "$LATEST" ]; then
+                            echo "     ✅ /$subvol: $LATEST"
+                            VERIFIED=$((VERIFIED + 1))
                           else
-                            echo "     ⚠️  /$subvol: snapshot directory missing"
+                            echo "     ⚠️  /$subvol: no snapshots found"
                             FAILED=$((FAILED + 1))
                           fi
                         done
