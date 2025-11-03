@@ -106,6 +106,7 @@ in
         (withSymlink ".local/state/home-manager")      # Home-manager state
         (withSymlink ".local/state/nix")               # Nix profiles/generations
         (withSymlink ".local/state/nvim")              # Neovim state
+        (withSymlink ".nix-defexpr")                   # Nix channel definitions
         (withSymlink ".local/state/wireplumber")       # Wireplumber audio state
         (withSymlink ".local/state/yazi")              # Yazi file manager
 
@@ -199,9 +200,7 @@ in
         # NOTE: .gnupg/gpg-agent.conf, gpg.conf, scdaemon.conf - managed by home-manager, don't persist
         ".gnupg/sshcontrol"                    # GPG SSH key control
 
-        # === .nix-defexpr files ===
-        ".nix-defexpr/channels"                # Nix user channel definitions (symlink)
-        ".nix-defexpr/channels_root"           # Nix root channel definitions (symlink)
+        # NOTE: .nix-defexpr - now persisting entire directory (see directories section), not individual files
 
         # === .npm files ===
         ".npm/_update-notifier-last-checked"   # NPM update checker timestamp
