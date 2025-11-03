@@ -152,7 +152,7 @@
                       if [ -n "''${SUBVOLS}" ]; then
                         echo "   Subvolumes to snapshot:"
                         for subvol in ''${SUBVOLS}; do
-                          echo "   • /''${subvol} → /.snapshots/''${subvol}.*"
+                          echo "   • /''${subvol} → /.snapshots.''${subvol}.*"
                         done
                       fi
 
@@ -169,8 +169,8 @@
                         FAILED=0
                         for subvol in ''${SUBVOLS}; do
                           # Find the most recent snapshot for this subvolume
-                          # btrbk creates snapshots as /.snapshots/SUBVOL.TIMESTAMP
-                          LATEST=$(${find} /.snapshots -maxdepth 1 -type d -name "''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
+                          # btrbk creates snapshots as /.snapshots.SUBVOL.TIMESTAMP
+                          LATEST=$(${find} / -maxdepth 1 -type d -name ".snapshots.''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
                           if [ -n "''${LATEST}" ]; then
                             echo "     ✅ /''${subvol}: ''${LATEST}"
                             VERIFIED=$((VERIFIED + 1))
