@@ -9,21 +9,23 @@ let
     ;
 
   flake.nixosConfigurations = {
-    annatar = wsl "annatar";
-    mordor = linux "mordor";
-    nargun = linux "nargun";
-    smaug = linux "smaug";
-    nienna = linux "nienna";
+    # Upstream vix hosts (commented out - not owned)
+    # annatar = wsl "annatar";
+    # mordor = linux "mordor";
+    # nargun = linux "nargun";
+    # smaug = linux "smaug";
+    # nienna = linux "nienna";
     tachi = linux "tachi";
-    tom = linux "tom";
-    bombadil = linux "bombadil";
-    bill = linux-arm "bill";
+    # tom = linux "tom";
+    # bombadil = linux "bombadil";
+    # bill = linux-arm "bill";
   };
 
   flake.darwinConfigurations = {
-    yavanna = darwin-intel "yavanna";
-    varda = darwin "varda";
-    bert = darwin "bert";
+    # Upstream vix hosts (commented out - not owned)
+    # yavanna = darwin-intel "yavanna";
+    # varda = darwin "varda";
+    # bert = darwin "bert";
   };
 
 in

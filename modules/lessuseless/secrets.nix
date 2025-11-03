@@ -40,7 +40,7 @@ let
           # SSH private keys (binary secrets)
           "ssh/id_ed25519" = {
             format = "binary";
-            sopsFile = ./secrets/mordor;
+            sopsFile = ./secrets/tachi;
           };
           "ssh/gh_ed25519" = {
             format = "binary";
