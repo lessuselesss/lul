@@ -44,7 +44,7 @@
                 pkgs.coreutils
                 pkgs.nix-output-monitor
               ]
-              ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.systemd pkgs.btrbk pkgs.util-linux ])
+              ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.systemd pkgs.btrbk pkgs.util-linux pkgs.sudo ])
 
             )
           }"
