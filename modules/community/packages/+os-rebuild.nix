@@ -158,36 +158,42 @@
 
                       echo ""
                       echo "  📸 Creating pre-rebuild snapshot..."
+                      echo ""
 
                       # Run btrbk to create snapshots
-                      if btrbk -c "''${BTRBK_CONF}" run 2>&1 | ${grep} -E '(snapshot|created|skipped)'; then
-                        echo ""
-                        echo "  🔍 Verifying snapshots..."
+                      btrbk -c "''${BTRBK_CONF}" run 2>&1
+                      BTRBK_EXIT=$?
 
-                        # Verify each snapshot was created
-                        VERIFIED=0
-                        FAILED=0
-                        for subvol in ''${SUBVOLS}; do
-                          # Find the most recent snapshot for this subvolume
-                          # btrbk creates snapshots as /.snapshots/SUBVOL.TIMESTAMP
-                          LATEST=$(${find} /.snapshots -maxdepth 1 -type d -name "''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
-                          if [ -n "''${LATEST}" ]; then
-                            echo "     ✅ /''${subvol}: ''${LATEST}"
-                            VERIFIED=$((VERIFIED + 1))
-                          else
-                            echo "     ⚠️  /''${subvol}: no snapshots found"
-                            FAILED=$((FAILED + 1))
-                          fi
-                        done
+                      echo ""
+                      echo "  🔍 Verifying snapshots..."
 
-                        echo ""
-                        if [ "''${VERIFIED}" -gt 0 ]; then
-                          echo "  ✅ Snapshot verification: ''${VERIFIED} verified, ''${FAILED} warnings"
+                      # Verify each snapshot was created
+                      VERIFIED=0
+                      FAILED=0
+                      for subvol in ''${SUBVOLS}; do
+                        # Find the most recent snapshot for this subvolume
+                        # btrbk creates snapshots as /.snapshots/SUBVOL.TIMESTAMP
+                        LATEST=$(${find} /.snapshots -maxdepth 1 -type d -name "''${subvol}.*" -printf '%f\n' 2>/dev/null | sort -r | head -1)
+                        if [ -n "''${LATEST}" ]; then
+                          echo "     ✅ /''${subvol}: ''${LATEST}"
+                          VERIFIED=$((VERIFIED + 1))
                         else
-                          echo "  ⚠️  No snapshots verified, continuing with rebuild..."
+                          echo "     ❌ /''${subvol}: no snapshots found"
+                          FAILED=$((FAILED + 1))
                         fi
+                      done
+
+                      echo ""
+                      if [ "''${VERIFIED}" -eq 0 ]; then
+                        echo "  ❌ FATAL: No snapshots verified!"
+                        echo "  Cannot proceed with rebuild - no backup available."
+                        echo "  btrbk exit code: ''${BTRBK_EXIT}"
+                        exit 1
+                      elif [ "''${FAILED}" -gt 0 ]; then
+                        echo "  ⚠️  Snapshot verification: ''${VERIFIED} verified, ''${FAILED} failed"
+                        echo "  Some snapshots missing but proceeding with ''${VERIFIED} valid backup(s)"
                       else
-                        echo "  ⚠️  Snapshot creation had issues, continuing with rebuild..."
+                        echo "  ✅ Snapshot verification: ''${VERIFIED} verified successfully"
                       fi
                     else
                       echo "  ℹ️  btrbk config not found at ''${BTRBK_CONF}, skipping snapshot"
