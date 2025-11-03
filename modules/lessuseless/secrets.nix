@@ -46,10 +46,10 @@ let
             format = "binary";
             sopsFile = ./secrets/gh_ed25519;
           };
-          "ssh/localhost_run" = {
-            format = "binary";
-            sopsFile = ./secrets/localhost_run;
-          };
+          # "ssh/localhost_run" = {
+          #   format = "binary";
+          #   sopsFile = ./secrets/localhost_run;
+          # };
 
           # Other binary secrets (commented for reference)
           # "edge.token" = {
