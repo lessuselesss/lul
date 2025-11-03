@@ -84,7 +84,7 @@ in
         # Handled in files = [ ] section below
 
         # === .local/share subdirectories ===
-        (withSymlink ".local/share/applications")    # Desktop entries
+        # NOTE: .local/share/applications - HM manages mimeapps.list, don't persist (desktop files regenerate)
         (withSymlink ".local/share/containers")      # Podman/container storage
         (withSymlink ".local/share/DankMaterialShell") # Shell theme
         (withSymlink ".local/share/direnv")          # Direnv allowed directories
