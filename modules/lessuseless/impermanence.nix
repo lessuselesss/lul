@@ -70,7 +70,9 @@ in
         # .config/nvim - managed by HM via dots.nix (symlink), don't persist
         (withSymlink ".config/pulse")           # PulseAudio settings
         (withSymlink ".config/quickshell")      # Quickshell config
-        (withSymlink ".config/qutebrowser")     # Qutebrowser - HM manages config.py, keep for sessions
+        # NOTE: .config/qutebrowser - HM manages config.py/quickmarks, only persist bookmarks/greasemonkey subdirs
+        (withSymlink ".config/qutebrowser/bookmarks")    # Qutebrowser bookmarks
+        (withSymlink ".config/qutebrowser/greasemonkey") # Qutebrowser userscripts
         (withSymlink ".config/sops")            # SOPS age keys (secrets)
         (withSymlink ".config/sops-nix")        # SOPS-nix state
         # NOTE: .config/systemd - contains old bindMount service symlinks from FUSE config, HM manages services, don't persist
