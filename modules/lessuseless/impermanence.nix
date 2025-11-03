@@ -89,7 +89,8 @@ in
         (withSymlink ".local/share/DankMaterialShell") # Shell theme
         (withSymlink ".local/share/direnv")          # Direnv allowed directories
         (withSymlink ".local/share/doom")            # Doom Emacs packages
-        (withSymlink ".local/share/fish")            # Fish shell history
+        # NOTE: .local/share/fish - HM manages home-manager_generated_completions symlink
+        (withSymlink ".local/share/fish/generated_completions") # Fish auto-generated completions (user)
         (withSymlink ".local/share/flatpak")         # Flatpak apps
         (withSymlink ".local/share/keyrings")        # GNOME keyring (passwords)
         (withSymlink ".local/share/luakit")          # Luakit browser data
@@ -167,6 +168,9 @@ in
         ".config/pavucontrol.ini"              # PulseAudio volume control settings
         ".config/fish/fish_variables"          # Fish shell variables and history (HM manages config/functions/completions)
         ".config/nix/nix.conf"                 # Nix user config (HM manages registry.json)
+
+        # === .local/share files ===
+        ".local/share/fish/fish_history"       # Fish shell command history
 
         # === .anydesk files ===
         ".anydesk/.anydesk.trace"              # AnyDesk trace log
