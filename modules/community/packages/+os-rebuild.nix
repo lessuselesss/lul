@@ -5,12 +5,12 @@
     { pkgs, lib, ... }:
     let
 
-      same-system-oses =
-        let
-          has-same-system = _n: o: o.config.nixpkgs.hostPlatform.system == pkgs.system;
-          all-oses = (inputs.self.nixosConfigurations or { }) // (inputs.self.darwinConfigurations or { });
-        in
-        lib.filterAttrs has-same-system all-oses;
+      same-system-oses = {};
+        # let
+        #   has-same-system = _n: o: o.config.nixpkgs.hostPlatform.system == pkgs.system;
+        #   all-oses = (inputs.self.nixosConfigurations or { }) // (inputs.self.darwinConfigurations or { });
+        # in
+        # lib.filterAttrs has-same-system all-oses;
 
       os-builder =
         name: os:

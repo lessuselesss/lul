@@ -1,6 +1,5 @@
 { ... }:
-let
-
+{
   flake.modules.homeManager.rdesk =
     { pkgs, lib, ... }:
     {
@@ -24,8 +23,4 @@ let
       50001 # anydesk
     ];
   };
-
-in
-{
-  inherit flake;
 }

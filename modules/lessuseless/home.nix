@@ -1,8 +1,5 @@
 { inputs, ... }:
 let
-  flake.homeConfigurations.lessuseless = lessuseless_at "tachi";
-  flake.homeConfigurations."lessuseless@tachi" = lessuseless_at "tachi";
-
   lessuseless_at =
     host:
     inputs.home-manager.lib.homeManagerConfiguration {
@@ -10,6 +7,10 @@ let
       modules = [ inputs.self.homeModules.lessuseless ];
       extraSpecialArgs.osConfig = inputs.self.nixosConfigurations.${host}.config;
     };
+in
+{
+  flake.homeConfigurations.lessuseless = lessuseless_at "tachi";
+  flake.homeConfigurations."lessuseless@tachi" = lessuseless_at "tachi";
 
   flake.homeModules.lessuseless.imports = [
     inputs.self.modules.homeManager.lessuseless
@@ -22,8 +23,4 @@ let
       home.homeDirectory = lib.mkDefault (if pkgs.stdenvNoCC.isDarwin then "/Users/lessuseless" else "/home/lessuseless");
       home.stateVersion = lib.mkDefault "25.05";
     };
-
-in
-{
-  inherit flake;
 }

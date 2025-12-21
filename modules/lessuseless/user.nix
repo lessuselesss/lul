@@ -1,22 +1,5 @@
 { inputs, ... }:
 let
-  flake.modules.nixos.lessuseless.imports = [
-    user
-    linux
-    autologin
-    home
-  ];
-
-  flake.modules.darwin.lessuseless.imports = [
-    user
-    darwin
-    home
-  ];
-
-  home.home-manager.users.lessuseless.imports = [
-    inputs.self.homeModules.lessuseless
-  ];
-
   autologin =
     { config, lib, ... }:
     lib.mkIf config.services.displayManager.enable {
@@ -80,7 +63,24 @@ let
         shell = pkgs.fish;
       };
     };
+
+  home = {
+    home-manager.users.lessuseless.imports = [
+      inputs.self.homeModules.lessuseless
+    ];
+  };
 in
 {
-  inherit flake;
+  flake.modules.nixos.lessuseless.imports = [
+    user
+    linux
+    autologin
+    home
+  ];
+
+  flake.modules.darwin.lessuseless.imports = [
+    user
+    darwin
+    home
+  ];
 }
