@@ -1,4 +1,4 @@
-## Immediate Tasks (tachi system blocked)
+~~~## Immediate Tasks (tachi system blocked)
 
 -[ ] **URGENT: Fix sudo access**
     - Current: Can't use sudo (empty password, mutableUsers=false)
