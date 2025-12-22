@@ -12,7 +12,7 @@
       imports = with inputs.self.modules.nixos; [
         "${toString modulesPath}/installer/cd-dvd/installation-cd-base.nix"
         lessuseless
-        impermanence  # User-level persistence (lessuseless module uses this)
+        impermanence # User-level persistence (lessuseless module uses this)
         macos-keys
         kvm-intel
         wl-broadcom

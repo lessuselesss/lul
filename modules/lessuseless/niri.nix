@@ -5,7 +5,7 @@
   # flake-file.inputs.dms.url = "github:AvengeMedia/DankMaterialShell";
 
   flake.modules.homeManager.lessuseless =
-    { pkgs, config, lib, ... }:
+    { pkgs, ... }:
     {
       imports = [
         # DMS temporarily disabled
@@ -19,7 +19,7 @@
         (inputs.nix-wallpaper.packages.${pkgs.system}.default.override {
           preset = "catppuccin-mocha-rainbow";
         })
-        pkgs.networkmanagerapplet  # Provides nm-applet
+        pkgs.networkmanagerapplet # Provides nm-applet
       ];
 
       # Note: Niri config.kdl is linked by dots.nix (entire .config/niri directory)
@@ -27,7 +27,11 @@
       # GNOME Keyring for credential storage
       services.gnome-keyring = {
         enable = true;
-        components = [ "pkcs11" "secrets" "ssh" ];
+        components = [
+          "pkcs11"
+          "secrets"
+          "ssh"
+        ];
       };
 
       # DankMaterialShell - temporarily disabled

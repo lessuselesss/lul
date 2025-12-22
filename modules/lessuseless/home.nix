@@ -20,7 +20,9 @@ in
     { pkgs, lib, ... }:
     {
       home.username = lib.mkDefault "lessuseless";
-      home.homeDirectory = lib.mkDefault (if pkgs.stdenvNoCC.isDarwin then "/Users/lessuseless" else "/home/lessuseless");
+      home.homeDirectory = lib.mkDefault (
+        if pkgs.stdenvNoCC.isDarwin then "/Users/lessuseless" else "/home/lessuseless"
+      );
       home.stateVersion = lib.mkDefault "25.05";
     };
 }

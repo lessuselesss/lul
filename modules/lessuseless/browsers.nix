@@ -1,12 +1,7 @@
-{ inputs, ... }:
-let
-  # Import browser profile definitions
-  quteProfiles = import ./_browsers/qutebrowser-profiles.nix;
-  chromeProfiles = import ./_browsers/chromium-profiles.nix;
-in
+{ ... }:
 {
   flake.modules.homeManager.lessuseless =
-    { config, pkgs, lib, ... }:
+    { ... }:
     {
       # Qutebrowser - keyboard-driven, minimal
       programs.qutebrowser = {

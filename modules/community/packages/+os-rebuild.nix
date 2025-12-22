@@ -5,12 +5,12 @@
     { pkgs, lib, ... }:
     let
 
-      same-system-oses = {};
-        # let
-        #   has-same-system = _n: o: o.config.nixpkgs.hostPlatform.system == pkgs.system;
-        #   all-oses = (inputs.self.nixosConfigurations or { }) // (inputs.self.darwinConfigurations or { });
-        # in
-        # lib.filterAttrs has-same-system all-oses;
+      same-system-oses =
+        let
+          has-same-system = _n: o: o.config.nixpkgs.hostPlatform.system == pkgs.system;
+          all-oses = (inputs.self.nixosConfigurations or { }) // (inputs.self.darwinConfigurations or { });
+        in
+        lib.filterAttrs has-same-system all-oses;
 
       os-builder =
         name: os:
@@ -23,7 +23,9 @@
         pkgs.writeShellApplication {
           name = "${name}-os-rebuild";
           text = ''
-            ${if platform.isDarwin then darwin-rebuild else nixos-rebuild} ${flake-param} --log-format internal-json -v "''${@}"
+            ${
+              if platform.isDarwin then darwin-rebuild else nixos-rebuild
+            } ${flake-param} --log-format internal-json -v "''${@}"
           '';
         };
 
@@ -43,11 +45,17 @@
               ++ [
                 pkgs.coreutils
                 pkgs.nix-output-monitor
+                pkgs.nix
+                pkgs.git
               ]
-              ++ (lib.optionals pkgs.stdenv.isLinux [ pkgs.systemd pkgs.btrbk pkgs.util-linux pkgs.sudo ])
+              ++ (lib.optionals pkgs.stdenv.isLinux [
+                pkgs.systemd
+                pkgs.btrbk
+                pkgs.util-linux
+              ])
 
             )
-          }"
+          }${lib.optionalString pkgs.stdenv.isLinux ":/run/wrappers/bin"}${lib.optionalString pkgs.stdenv.isDarwin ":/usr/bin"}"
 
           # Parse output format flag (environment variable or CLI flag)
           OUTPUT_FORMAT="''${OUTPUT_FORMAT:-nom}"  # default to nom, or use env var
@@ -161,7 +169,7 @@
                       echo ""
 
                       # Run btrbk to create snapshots
-                      btrbk -c "''${BTRBK_CONF}" run 2>&1
+                      sudo btrbk -c "''${BTRBK_CONF}" run 2>&1
                       BTRBK_EXIT=$?
 
                       echo ""
@@ -246,20 +254,20 @@
             # Apply output formatter
             case "$OUTPUT_FORMAT" in
               nom)
-                "$hostname-os-rebuild" "''${@:-switch}" |& nom --json
+                sudo "$hostname-os-rebuild" "''${@:-switch}" |& nom --json
                 ;;
               pinix)
                 if command -v pinix &> /dev/null; then
-                  "$hostname-os-rebuild" "''${@:-switch}" |& pinix
+                  sudo "$hostname-os-rebuild" "''${@:-switch}" |& pinix
                 else
                   echo "⚠️  pinix not found, falling back to nom"
-                  "$hostname-os-rebuild" "''${@:-switch}" |& nom --json
+                  sudo "$hostname-os-rebuild" "''${@:-switch}" |& nom --json
                 fi
                 ;;
               standard|plain)
                 # Remove --log-format from the rebuild command for plain output
                 # This requires modifying the host script behavior, so for now just pass through
-                "$hostname-os-rebuild" "''${@:-switch}"
+                sudo "$hostname-os-rebuild" "''${@:-switch}"
                 ;;
               *)
                 echo "Unknown output format: $OUTPUT_FORMAT"

@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ inputs, ... }:
 let
   # Helper to create symlinked directory entries
   withSymlink = dir: {
@@ -37,46 +37,46 @@ in
 
         # === .config subdirectories (alphabetically) ===
         # TODO: Mark which are managed by home-manager vs runtime state
-        (withSymlink ".config/BeeperTexts")     # TODO: check if HM manages
+        (withSymlink ".config/BeeperTexts") # TODO: check if HM manages
         # NOTE: .config/chromium - persist Default profile for state, but not External Extensions (HM-managed)
-        (withSymlink ".config/chromium/Default")              # Browser profile (cookies, sessions, bookmarks, history)
-        (withSymlink ".config/claude")          # Claude CLI config
+        (withSymlink ".config/chromium/Default") # Browser profile (cookies, sessions, bookmarks, history)
+        (withSymlink ".config/claude") # Claude CLI config
         # NOTE: .config/Code - only contains HM-managed symlinks (settings.json/keybindings.json), don't persist
-        (withSymlink ".config/configstore")     # Runtime app configs
+        (withSymlink ".config/configstore") # Runtime app configs
         # NOTE: .config/Cursor - only contains HM-managed symlinks (settings.json/keybindings.json), don't persist
-        (withSymlink ".config/dconf")           # GTK/GNOME settings - HM may manage
+        (withSymlink ".config/dconf") # GTK/GNOME settings - HM may manage
         # NOTE: .config/direnv - HM manages lib/ files (use_nix_installables.sh, etc), only symlinks here. Real state in .local/share/direnv
         # .config/doom - managed by HM via dots.nix (symlink), don't persist
-        (withSymlink ".config/emacs")           # Emacs runtime state (doom uses this)
-        (withSymlink ".config/enchant")         # Spell checking config
+        (withSymlink ".config/emacs") # Emacs runtime state (doom uses this)
+        (withSymlink ".config/enchant") # Spell checking config
         # NOTE: .config/environment.d - HM manages 10-home-manager.conf, don't persist
         # NOTE: .config/evolution - empty directory, don't persist
         # NOTE: .config/fish - HM manages config/functions/completions/conf.d, only persist fish_variables (in files section)
-        (withSymlink ".config/gh")              # GitHub CLI - OAuth tokens (secrets)
+        (withSymlink ".config/gh") # GitHub CLI - OAuth tokens (secrets)
         # .config/ghostty - managed by HM via dots.nix (symlink), don't persist
         # NOTE: .config/ghostty.backup - empty directory, don't persist
         # NOTE: .config/git - HM manages config and ignore files, only symlinks here
-        (withSymlink ".config/go")              # Go language config
-        (withSymlink ".config/google-chrome")   # Chrome browser
+        (withSymlink ".config/go") # Go language config
+        (withSymlink ".config/google-chrome") # Chrome browser
         # NOTE: .config/helix - empty directory, don't persist
         # NOTE: .config/jj - HM manages config.toml, only symlinks here
         # NOTE: .config/jjui - HM manages config.toml, only symlinks here
         # NOTE: .config/luakit - empty directory, don't persist (browser data in .local/share/luakit)
-        (withSymlink ".config/lul")             # THIS REPO - flake config
-        (withSymlink ".config/lul-bak")         # Backup of lul config
-        (withSymlink ".config/lul-old-new")     # Backup of lul config
+        (withSymlink ".config/lul") # THIS REPO - flake config
+        (withSymlink ".config/lul-bak") # Backup of lul config
+        (withSymlink ".config/lul-old-new") # Backup of lul config
         # .config/niri - managed by HM via dots.nix (symlink), don't persist
         # NOTE: .config/nix - HM manages registry.json, only persist nix.conf file (in files section)
         # .config/nvim - managed by HM via dots.nix (symlink), don't persist
-        (withSymlink ".config/pulse")           # PulseAudio settings
-        (withSymlink ".config/quickshell")      # Quickshell config
+        (withSymlink ".config/pulse") # PulseAudio settings
+        (withSymlink ".config/quickshell") # Quickshell config
         # NOTE: .config/qutebrowser - HM manages config.py/quickmarks, only persist bookmarks/greasemonkey subdirs
-        (withSymlink ".config/qutebrowser/bookmarks")    # Qutebrowser bookmarks
+        (withSymlink ".config/qutebrowser/bookmarks") # Qutebrowser bookmarks
         (withSymlink ".config/qutebrowser/greasemonkey") # Qutebrowser userscripts
-        (withSymlink ".config/sops")            # SOPS age keys (secrets)
-        (withSymlink ".config/sops-nix")        # SOPS-nix state
+        (withSymlink ".config/sops") # SOPS age keys (secrets)
+        (withSymlink ".config/sops-nix") # SOPS-nix state
         # NOTE: .config/systemd - contains old bindMount service symlinks from FUSE config, HM manages services, don't persist
-        (withSymlink ".config/television")      # Television app
+        (withSymlink ".config/television") # Television app
         # .config/wezterm - managed by HM via dots.nix (symlink), don't persist
         # .config/zed - managed by HM via dots.nix (symlink), don't persist
 
@@ -85,69 +85,69 @@ in
 
         # === .local/share subdirectories ===
         # NOTE: .local/share/applications - HM manages mimeapps.list, don't persist (desktop files regenerate)
-        (withSymlink ".local/share/containers")      # Podman/container storage
+        (withSymlink ".local/share/containers") # Podman/container storage
         (withSymlink ".local/share/DankMaterialShell") # Shell theme
-        (withSymlink ".local/share/direnv")          # Direnv allowed directories
-        (withSymlink ".local/share/doom")            # Doom Emacs packages
+        (withSymlink ".local/share/direnv") # Direnv allowed directories
+        (withSymlink ".local/share/doom") # Doom Emacs packages
         # NOTE: .local/share/fish - HM manages home-manager_generated_completions symlink
         (withSymlink ".local/share/fish/generated_completions") # Fish auto-generated completions (user)
-        (withSymlink ".local/share/flatpak")         # Flatpak apps
-        (withSymlink ".local/share/keyrings")        # GNOME keyring (passwords)
-        (withSymlink ".local/share/luakit")          # Luakit browser data
-        (withSymlink ".local/share/nvim")            # Neovim plugins/state
-        (withSymlink ".local/share/qutebrowser")     # Qutebrowser sessions/cookies
+        (withSymlink ".local/share/flatpak") # Flatpak apps
+        (withSymlink ".local/share/keyrings") # GNOME keyring (passwords)
+        (withSymlink ".local/share/luakit") # Luakit browser data
+        (withSymlink ".local/share/nvim") # Neovim plugins/state
+        (withSymlink ".local/share/qutebrowser") # Qutebrowser sessions/cookies
         (withSymlink ".local/share/TelegramDesktop") # Telegram app data
-        (withSymlink ".local/share/television")      # Television app data
-        (withSymlink ".local/share/uv")              # UV Python tool
-        (withSymlink ".local/share/zed")             # Zed editor extensions/state
+        (withSymlink ".local/share/television") # Television app data
+        (withSymlink ".local/share/uv") # UV Python tool
+        (withSymlink ".local/share/zed") # Zed editor extensions/state
 
         # === .local/state subdirectories ===
         (withSymlink ".local/state/DankMaterialShell") # Shell theme state
-        (withSymlink ".local/state/home-manager")      # Home-manager state
-        (withSymlink ".local/state/nix")               # Nix profiles/generations
-        (withSymlink ".local/state/nvim")              # Neovim state
-        (withSymlink ".nix-defexpr")                   # Nix channel definitions
-        (withSymlink ".local/state/wireplumber")       # Wireplumber audio state
-        (withSymlink ".local/state/yazi")              # Yazi file manager
+        (withSymlink ".local/state/home-manager") # Home-manager state
+        (withSymlink ".local/state/nix") # Nix profiles/generations
+        (withSymlink ".local/state/nvim") # Neovim state
+        (withSymlink ".nix-defexpr") # Nix channel definitions
+        (withSymlink ".local/state/wireplumber") # Wireplumber audio state
+        (withSymlink ".local/state/yazi") # Yazi file manager
 
         # === .cache subdirectories (important caches only) ===
         # Most caches can regenerate, but some are expensive or contain sessions
-        (withSymlink ".cache/chromium")        # Browser cache (sessions may be here)
-        (withSymlink ".cache/nix")             # Nix evaluation cache (faster rebuilds)
+        (withSymlink ".cache/chromium") # Browser cache (sessions may be here)
+        (withSymlink ".cache/nix") # Nix evaluation cache (faster rebuilds)
         # NOTE: .cache/nix-index - HM manages files symlink, don't persist (database rebuilt by HM)
-        (withSymlink ".cache/spotify")         # Spotify downloaded music + keys
-        (withSymlink ".cache/uv")              # UV Python tool cache
+        (withSymlink ".cache/spotify") # Spotify downloaded music + keys
+        (withSymlink ".cache/uv") # UV Python tool cache
 
         # === .anydesk subdirectories ===
-        (withSymlink ".anydesk/cache")         # AnyDesk connection cache
-        (withSymlink ".anydesk/global_cache")  # AnyDesk global cache data
+        (withSymlink ".anydesk/cache") # AnyDesk connection cache
+        (withSymlink ".anydesk/global_cache") # AnyDesk global cache data
 
         # === .claude subdirectories ===
-        (withSymlink ".claude/debug")          # Claude CLI debug logs
-        (withSymlink ".claude/file-history")   # Claude file operation history
-        (withSymlink ".claude/plugins")        # Claude CLI plugins
-        (withSymlink ".claude/projects")       # Claude project data
-        (withSymlink ".claude/session-env")    # Claude session environment data
+        (withSymlink ".claude/debug") # Claude CLI debug logs
+        (withSymlink ".claude/file-history") # Claude file operation history
+        (withSymlink ".claude/plugins") # Claude CLI plugins
+        (withSymlink ".claude/projects") # Claude project data
+        (withSymlink ".claude/session-env") # Claude session environment data
         (withSymlink ".claude/shell-snapshots") # Claude shell state snapshots
-        (withSymlink ".claude/statsig")        # Claude analytics/telemetry
-        (withSymlink ".claude/todos")          # Claude TODO tracking data
+        (withSymlink ".claude/statsig") # Claude analytics/telemetry
+        (withSymlink ".claude/todos") # Claude TODO tracking data
 
         # === .gemini subdirectories ===
-        (withSymlink ".gemini/tmp")            # Gemini temporary files
+        (withSymlink ".gemini/tmp") # Gemini temporary files
 
         # === .gnupg subdirectories ===
         (withSymlink ".gnupg/private-keys-v1.d") # GPG private key storage (SECRETS)
 
         # === .mozilla subdirectories ===
-        (withSymlink ".mozilla/firefox")       # Firefox profiles (bookmarks, history, passwords)
+        (withSymlink ".mozilla/firefox") # Firefox profiles (bookmarks, history, passwords)
 
         # === .npm subdirectories ===
-        (withSymlink ".npm/_cacache")          # NPM package cache (saves bandwidth)
-        (withSymlink ".npm/_logs")             # NPM installation logs
-        (withSymlink ".npm/_npx")              # NPX binary cache
+        (withSymlink ".npm/_cacache") # NPM package cache (saves bandwidth)
+        (withSymlink ".npm/_logs") # NPM installation logs
+        (withSymlink ".npm/_npx") # NPX binary cache
 
         # === .pki subdirectories ===
-        (withSymlink ".pki/nssdb")             # NSS certificate database (Chrome/Firefox certs)
+        (withSymlink ".pki/nssdb") # NSS certificate database (Chrome/Firefox certs)
 
         # === .cursor subdirectories ===
         # NOTE: .cursor/extensions - HM manages extensions.json, don't persist directory
@@ -156,66 +156,66 @@ in
         # NOTE: .vscode/extensions - HM manages extensions.json, don't persist directory
 
         # === .vscode-server subdirectories ===
-        (withSymlink ".vscode-server/bin")     # VS Code remote server binaries
-        (withSymlink ".vscode-server/cli")     # VS Code remote CLI tools
+        (withSymlink ".vscode-server/bin") # VS Code remote server binaries
+        (withSymlink ".vscode-server/cli") # VS Code remote CLI tools
       ];
       files = [
         # === Dotfiles at ~/ root ===
-        ".bash_history"                        # Bash command history
-        ".zsh_history"                         # Zsh command history
+        ".bash_history" # Bash command history
+        ".zsh_history" # Zsh command history
 
         # === .config files (EXCEPTION: .config has special rule - only these files) ===
         # NOTE: .config/mimeapps.list - managed by home-manager elsewhere, don't persist
-        ".config/pavucontrol.ini"              # PulseAudio volume control settings
-        ".config/fish/fish_variables"          # Fish shell variables and history (HM manages config/functions/completions)
-        ".config/nix/nix.conf"                 # Nix user config (HM manages registry.json)
+        ".config/pavucontrol.ini" # PulseAudio volume control settings
+        ".config/fish/fish_variables" # Fish shell variables and history (HM manages config/functions/completions)
+        ".config/nix/nix.conf" # Nix user config (HM manages registry.json)
 
         # === .local/share files ===
-        ".local/share/fish/fish_history"       # Fish shell command history
+        ".local/share/fish/fish_history" # Fish shell command history
 
         # === .anydesk files ===
-        ".anydesk/.anydesk.trace"              # AnyDesk trace log
-        ".anydesk/anydesk.trace"               # AnyDesk trace log (no dot prefix)
-        ".anydesk/connection_trace.txt"        # AnyDesk connection trace
-        ".anydesk/.iid"                        # AnyDesk installation ID
-        ".anydesk/service.conf"                # AnyDesk service configuration
-        ".anydesk/system.conf"                 # AnyDesk system configuration
-        ".anydesk/user.conf"                   # AnyDesk user configuration
+        ".anydesk/.anydesk.trace" # AnyDesk trace log
+        ".anydesk/anydesk.trace" # AnyDesk trace log (no dot prefix)
+        ".anydesk/connection_trace.txt" # AnyDesk connection trace
+        ".anydesk/.iid" # AnyDesk installation ID
+        ".anydesk/service.conf" # AnyDesk service configuration
+        ".anydesk/system.conf" # AnyDesk system configuration
+        ".anydesk/user.conf" # AnyDesk user configuration
 
         # === .claude files (SECRETS) ===
-        ".claude/.credentials.json"            # Claude CLI authentication credentials (SECRET)
-        ".claude/history.jsonl"                # Claude CLI command history
-        ".claude/settings.json"                # Claude CLI settings
-        ".claude/settings.local.json"          # Claude CLI local settings override
+        ".claude/.credentials.json" # Claude CLI authentication credentials (SECRET)
+        ".claude/history.jsonl" # Claude CLI command history
+        ".claude/settings.json" # Claude CLI settings
+        ".claude/settings.local.json" # Claude CLI local settings override
 
         # === .gemini files (SECRETS) ===
-        ".gemini/GEMINI.md"                    # Gemini documentation
-        ".gemini/google_accounts.json"         # Gemini Google account info
-        ".gemini/installation_id"              # Gemini installation ID
-        ".gemini/oauth_creds.json"             # Gemini OAuth credentials (SECRET)
-        ".gemini/settings.json"                # Gemini settings
-        ".gemini/settings.json-bak"            # Gemini settings backup
+        ".gemini/GEMINI.md" # Gemini documentation
+        ".gemini/google_accounts.json" # Gemini Google account info
+        ".gemini/installation_id" # Gemini installation ID
+        ".gemini/oauth_creds.json" # Gemini OAuth credentials (SECRET)
+        ".gemini/settings.json" # Gemini settings
+        ".gemini/settings.json-bak" # Gemini settings backup
 
         # === .gnupg files (SECRETS) ===
         # NOTE: .gnupg/gpg-agent.conf, gpg.conf, scdaemon.conf - managed by home-manager, don't persist
-        ".gnupg/sshcontrol"                    # GPG SSH key control
+        ".gnupg/sshcontrol" # GPG SSH key control
 
         # NOTE: .nix-defexpr - now persisting entire directory (see directories section), not individual files
 
         # === .npm files ===
-        ".npm/_update-notifier-last-checked"   # NPM update checker timestamp
+        ".npm/_update-notifier-last-checked" # NPM update checker timestamp
 
         # === .ssh files (SECRETS) ===
         # NOTE: Home-manager manages .ssh directory recursively via dots.nix
         # Only persist private keys and state files (public keys come from HM)
-        ".ssh/gh_ed25519"                      # GitHub SSH private key (SECRET)
-        ".ssh/id_ed25519"                      # Default SSH private key (SECRET)
-        ".ssh/id_localhost_run"                # Localhost run SSH private key (SECRET)
-        ".ssh/known_hosts"                     # SSH known hosts fingerprints
-        ".ssh/known_hosts.old"                 # SSH known hosts backup
+        ".ssh/gh_ed25519" # GitHub SSH private key (SECRET)
+        ".ssh/id_ed25519" # Default SSH private key (SECRET)
+        ".ssh/id_localhost_run" # Localhost run SSH private key (SECRET)
+        ".ssh/known_hosts" # SSH known hosts fingerprints
+        ".ssh/known_hosts.old" # SSH known hosts backup
 
         # === .w3m files ===
-        ".w3m/history"                         # w3m browser history
+        ".w3m/history" # w3m browser history
       ];
       allowOther = true;
     };

@@ -20,7 +20,7 @@
           difftool.prompt = false;
           difftool.difftastic.cmd = "${pkgs.difftastic}/bin/difft $LOCAL $REMOTE";
 
-          github.user = "lessuselesss";  # three 's'
+          github.user = "lessuselesss"; # three 's'
           gitlab.user = "lessuseless";
 
           core.editor = "vim";

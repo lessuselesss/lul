@@ -9,7 +9,7 @@ let
     {
       programs.ssh = {
         enable = true;
-        enableDefaultConfig = false;  # Explicitly manage defaults
+        enableDefaultConfig = false; # Explicitly manage defaults
         # DISABLED: sops ssh config not set up yet
         # includes = [ "~/.config/sops-nix/secrets/ssh/sops_ssh_config" ];
 
@@ -24,7 +24,7 @@ let
 
           "github.com" = {
             identityFile = "~/.ssh/gh_ed25519";
-            controlPersist = "no";  # Override default
+            controlPersist = "no"; # Override default
           };
 
           "edge" = {

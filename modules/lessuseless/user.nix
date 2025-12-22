@@ -12,13 +12,13 @@ let
     {
       users.users.lessuseless = {
         isNormalUser = true;
-        uid = 1000;  # Fixed UID for impermanence
+        uid = 1000; # Fixed UID for impermanence
         extraGroups = [
           "networkmanager"
           "wheel"
-          "video"      # Access to video devices
-          "audio"      # Access to audio devices
-          "plugdev"    # Access to pluggable devices (USB, etc.)
+          "video" # Access to video devices
+          "audio" # Access to audio devices
+          "plugdev" # Access to pluggable devices (USB, etc.)
         ];
         # Password configured via initialHashedPassword
         # Use initialHashedPassword with users.mutableUsers = false from impermanence

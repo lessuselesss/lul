@@ -1,11 +1,7 @@
 { inputs, ... }:
 let
   inherit (inputs.self.lib.mk-os)
-    wsl
     linux
-    linux-arm
-    darwin
-    darwin-intel
     ;
 
   flake.nixosConfigurations = {

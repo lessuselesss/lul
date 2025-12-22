@@ -12,7 +12,7 @@ let
         name = "edgevpn";
         src = inputs.edgevpn;
         doCheck = false;
-        vendorHash = "sha256-/YAE34MmGsluncabzTcyIGYQUFDPUKidol7hZP2uR20=";
+        vendorHash = "sha256-qnSlLyfsKha/V4R7RBkbJ0gQk1tb83nu1WtIBA262Uw=";
         meta.mainProgram = "edgevpn";
       };
     };

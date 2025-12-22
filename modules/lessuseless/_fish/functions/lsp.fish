@@ -1,6 +1,6 @@
 function lsp --description "List files with rainbow-colored persistent directories"
-    set -l persist_dirs ".ssh" "Documents" "Downloads" "Music" "Pictures" "Videos" \
-                        ".mozilla" ".config" ".local" "dotfiles" ".cache"
+    set -l persist_dirs ".ssh" Documents Downloads Music Pictures Videos \
+        ".mozilla" ".config" ".local" dotfiles ".cache"
 
     set -l rainbow_colors red yellow green cyan blue magenta
     set -l color_offset 0

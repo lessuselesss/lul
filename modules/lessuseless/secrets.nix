@@ -20,7 +20,7 @@ let
       sops = {
         # Use age keys (backed up to Ventoy)
         age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-        age.generateKey = true;  # Auto-generate if missing
+        age.generateKey = true; # Auto-generate if missing
         age.sshKeyPaths = [ ];
 
         # Disable GPG
@@ -28,7 +28,7 @@ let
         gnupg.sshKeyPaths = [ ];
 
         defaultSopsFile = ./secrets.yaml;
-        validateSopsFiles = false;  # Disable until we set up new keys
+        validateSopsFiles = false; # Disable until we set up new keys
 
         secrets = {
           "hello" = { };

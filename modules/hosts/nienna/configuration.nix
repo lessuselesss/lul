@@ -9,7 +9,7 @@
 let
   flake.modules.nixos.nienna.imports = with inputs.self.modules.nixos; [
     lessuseless
-    impermanence  # User-level persistence (lessuseless module uses this)
+    impermanence # User-level persistence (lessuseless module uses this)
     xfce-desktop
     macos-keys
     kvm-intel
