@@ -5,5 +5,6 @@
     inputs.self.modules.homeManager.nix-index
     inputs.self.modules.homeManager.nix-registry
     inputs.self.modules.homeManager.vscode-server
+    inputs.self.modules.homeManager.antigravity
   ];
 }

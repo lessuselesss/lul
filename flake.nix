@@ -13,6 +13,7 @@
 
   inputs = {
     SPC.url = "github:vic/SPC";
+    antigravity-nix.url = "github:fdiblen/antigravity-nix";
     devshell.url = "github:numtide/devshell";
     disko = {
       inputs.nixpkgs.follows = "nixpkgs";
